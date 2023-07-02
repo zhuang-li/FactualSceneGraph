@@ -1,0 +1,1011 @@
+<meta content="width=device-width,initial-scale=1" name="viewport" />
+<section class="container" id="all"><crowd-form id="crowd_form">
+<div class="row">
+<div class="col-xs-12 col-md-12">
+<div class="panel panel-primary">
+<p><a class="panel-heading" href="javascript:void(0);" id="collapseTrigger"><strong>Tagging Instructions</strong> <span class="collapse-text">(Click to expand)</span></a></p>
+
+<div class="panel-body" id="instructionBody">
+<h4>Please annotate the scene graph in the image caption.</h4>
+&nbsp;
+
+<div class="text-left">
+<h3>Image Caption:</h3>
+
+<p style="font-size:15px">White antenna on top of the boat</p>
+</div>
+
+<div class="pic-show">
+<h3>Image:</h3>
+<img alt="" src="https://cs.stanford.edu/people/rak248/VG_100K/2345054.jpg" /></div>
+&nbsp;
+
+<div style="font-size:15px">Please annotate the scene graph in the image caption. The scene graph describes the text nodes in the image caption and the relations between those nodes.
+<h2>A complete example</h2>
+
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th scope="col">Sub Node Id</th>
+			<th scope="col">Subject Node</th>
+			<th scope="col">Verb</th>
+			<th scope="col">Preposition</th>
+			<th scope="col">Obj Node Id</th>
+			<th scope="col">Object Node</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td class="td">Node0</td>
+			<td class="td">antenna</td>
+			<td class="td">has_attribute</td>
+			<td class="td">no_preposition</td>
+			<td class="td">Node1</td>
+			<td class="td">White</td>
+		</tr>
+		<tr>
+			<td class="td">Node0</td>
+			<td class="td">antenna</td>
+			<td class="td">no_verb</td>
+			<td class="td">on top of</td>
+			<td class="td">Node2</td>
+			<td class="td">boat</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>What is a node?</h2>
+A text node is a phrase in the caption either indicating an object grounded in the image or the attribute of an object. For example, in the caption &quot;White antenna on top of a boat&quot;, &quot;antenna&quot; and &quot;boat&quot; are the object nodes. &quot;White&quot; is an attribute node that describes the object &quot;antenna&quot;.
+
+<ul>
+	<li>All attributes should be adjective. The &quot;stone&quot; in &quot;stone wall&quot; is not an attribute since here &quot;stone&quot; is a noun. So you should consider the whole phrase, &quot;stone wall&quot;, as one object node which is a multi-word expression. Tip: if the attribute is an adjective, the phrase can be rephrased as &quot;[object] is [attribute]&quot;. For example, &quot;White antenna&quot; can be rephrased as &quot;[antenna] is [White]&quot;. But &quot;[wall] is [stone]&quot; sounds odd.</li>
+	<li>Please note the node text should exactly match the text in the caption, otherwise you can not submit the HIT. For example, &quot;white&quot; does not match the text &quot;White&quot; in the caption.</li>
+	<li>Please note that we also annotate quantity. For example, the quantity of &quot;a shoe&quot; is &quot;one&quot;. The quantity of &quot;a pair of shoes&quot; is &quot;a pair of&quot;. The quantity of &quot;two baskets of apples&quot; is &quot;two groups of&quot;. And note in this phrase, there is also an implicit relation here, &quot;apples in basket&quot;.</li>
+	<li>When two nodes have the same text, differentiate them with the node ids. For example, in caption &quot;a red wall on the back of a black wall&quot;. You could annotate the red &quot;wall&quot; as &quot;Node0&quot; and black &quot;wall&quot; as &quot;Node1&quot;. Of course, the attributes &quot;black&quot; here is &quot;Node2&quot; and &quot;red&quot; is &quot;Node3&quot;.</li>
+</ul>
+
+<h2>What is a relation?</h2>
+A relation includes two parts, verb and preposition, which describe the relationship between the nodes. For simplicity, we converted all the verbs into their original forms. For example, &quot;is surrounded&quot; or &quot;surrounding&quot; are all converted into &quot;surround&quot;.
+
+<ul>
+	<li>We provide a list of candidate verbs and a list of candidate of prepositions to annotate the captions. If you can not find the verbs or prepositions which exactly match the verbs or prepositions in the caption, select the ones with their closest semantic meanings. For example, for the caption, &quot;the man is leaning on the back of a bike&quot;, if we don&#39;t provide the preposition &quot;on the back of&quot; while we provide the preposition &quot;on the backwards&quot;, please select this one as the answer.</li>
+	<li>There are two default verbs &quot;no_verb&quot; and &quot;has_attribute&quot;. If you can not find any verbs describing the relations or the verb is &quot;is&quot;, &quot;are&quot;, etc., just select &quot;no_verb&quot;. We consider &quot;has_attribute&quot; as a special verb which only connects objects with attributes.</li>
+	<li>There is one default preposition &quot;no_preposition&quot;. If you can not find any preposition describing the relations, just select &quot;no_preposition&quot;. Notice that if you select &quot;has_attribute&quot; as the verb, the preposition would be selected as &quot;no_preposition&quot; by default.</li>
+	<li><em>Important Note:</em> Please try to <em>always</em> annotate the relation in the active voice. For example, in the caption &quot;the gate is surrounded by fence&quot;. The relation between [fence] and [gate] should be [fence] &quot;surround&quot; &quot;no_preposition&quot; [gate] <em>but not</em> [gate] &quot;surround&quot; &quot;by&quot; [fence]&quot;. Only in the cases when it is not possible to annotate the relation with the active voice, you should annotate the relation with passive voice. For example, in the caption &quot;the mug is filled with coffee&quot;. The object [coffee] can not perform the action &quot;fill&quot;. Therefore, the relation can only be, [mug] &quot;fill&quot; &quot;with&quot; [coffee]&quot;. Although here &quot;fill&quot; is the original form of &quot;is filled&quot;, you could select &quot;passive voice&quot; before this &quot;verb&quot;, which could indicate that the verb &quot;fill&quot; is actually in its passive voice. If caption is &quot;the man fill the mug with coffee&quot;, [man] could perform action &quot;fill&quot;. Therefore, the graph includes two triples, [man] &quot;fill&quot; &quot;no_preposition&quot; [mug], [mug] &quot;fill&quot; &quot;with&quot; [coffee]. We also provide an option to select whether the verb is in active voice or passive voice. The order of objects is very important in our study, please be careful about the order!!!</li>
+</ul>
+
+<h2>Some Corner Cases (read only when you don&#39;t know how to annotate)</h2>
+Below are some corner cases we annotated. If you find the caption difficult to annotate, please check the corner cases for reference. If after observation with the corner cases, you still don&#39;t know how to annotate. Please see the box at the bottom and write down why you find it difficult.
+
+<ul>
+	<li>Sometimes, there is no relation in the caption. For example, for the caption &quot;olive topping&quot;, it has only one object without any relation. Then the whole graph includes only one node &quot;olive topping&quot; without any relations.</li>
+	<li>We find the relation &quot;of&quot; is usually difficult to annotate. For example, the caption &quot;head of a person&quot; or &quot;a person&#39;s head&quot; should all be annotated as [person] &quot;have&quot; &quot;no_preposition&quot; [head].</li>
+	<li>Sometimes, there are two relations between a pair of objects. For example, the caption &quot;street beneath and around the skater&quot; should be annotated as two triples, [street] &quot;no_verb&quot; &quot;beneath&quot; [skater], [street] &quot;no_verb&quot; &quot;around&quot; [skater].</li>
+	<li>The co-reference should be resolved first before the graph annotation. For example, the caption &quot;the apples have light spots on them&quot; should be annotated as [light spots] &quot;no_verb&quot; &quot;on&quot; [apples]. The anaphora, &quot;them&quot;, points to the object [apples].</li>
+	<li>Sometimes, there are grammar errors in the caption. Please fix the grammar errors given your experience and annotate the caption. For example, &quot;the man is swinging racket a ball&quot; should be corrected as &quot;the man is swinging racket and a ball&quot;. Then the graph is as two triples, [man] &quot;swing&quot; &quot;no_preposition&quot; [racket], [man] &quot;swing&quot; &quot;no_preposition&quot; [ball].</li>
+	<li>There are self-loops in the graph. For example, caption &quot;two boys sitting side by side&quot; should be annotated as, [two boys] &quot;sit&quot; &quot;side by side&quot; [two boys]. The object, [two boys], connects to itself [two boys] through the relation ,&quot;sit&quot; &quot;side by side&quot;.</li>
+	<li>Sometimes, verb can be considered as the attribute. In caption, &quot;the man is reading&quot;. It should be annotated as, [man] &quot;has_attribute&quot; &quot;no_preposition&quot; [reading]. Here &quot;reading&quot; is considered as an attribute.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="row text-center">
+<div class="col-xs-12 col-md-12">
+<div class="panel panel-primary">
+<h2>Image-Caption</h2>
+
+<div class="panel-body">
+<div>
+<h3>Caption:</h3>
+
+<p style="font-size:15px">{{caption}}</p>
+</div>
+
+<div class="pic-show">
+<h3>Image Id : {{image_id}}</h3>
+<img alt="" src="${Image_Url}" /></div>
+<!--"https://media.istockphoto.com/photos/leisure-picture-id477545488?k=6&m=477545488&s=612x612&w=0&h=LA47_J8Sk-702QTCqpbzy3I_ziZXfixqX7JuzUuWef0="--></div>
+</div>
+</div>
+</div>
+
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th scope="col">Node Ids</th>
+			<th scope="col">Quantity</th>
+			<th scope="col">Node Name</th>
+			<th scope="col">Node Position in the Caption</th>
+			<th scope="col">Remove Button</th>
+		</tr>
+	</thead>
+	<tbody id="example_node_list">
+	</tbody>
+</table>
+
+<div class="row" id="add_delete_nodes">
+<div class="btn-group col-md-2"><button class="btn btn-default btn-warning" id="add_node" type="button">Add New Node</button><!--<button type="button" class="btn btn-default btn-success" id="delete_node">Delete New Node</button>--></div>
+</div>
+
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th scope="col">Sub Node Id</th>
+			<th scope="col">Subject Node</th>
+			<th scope="col">Verb Voice</th>
+			<th scope="col">Verb</th>
+			<th scope="col">Preposition</th>
+			<th scope="col">Obj Node Id</th>
+			<th scope="col">Object Node</th>
+			<th scope="col">Remove Button</th>
+		</tr>
+	</thead>
+	<tbody id="example_graph">
+	</tbody>
+</table>
+
+<div class="btn-group-vertical" id="add_delete_relations">
+<div class="input-group" id="add_relation_group"><button class="btn btn-lg btn-warning" id="add_relation" type="button">Add New Relation between the Subject and Object Nodes:</button></div>
+</div>
+
+<div class="row" id="form">&nbsp;</div>
+<!--
+	<label><h4>Is the presented graph complete and correct with respect to the corresponding image and caption?</h4>
+		<ul>
+			<li><h4>If the graph is not complete, please add new nodes and relations.</h4></li>
+			<li><h4>If the graph is not correct, please remove the false nodes and relations, and add the correct nodes and relations.</h4></li>
+		</ul>
+		<h4> Tick "No" to see the hidden buttons of Add Node and Add Relation.</h4>
+	</label>
+	--> <label> </label>
+
+<ul>
+	<li>
+	<h4><label>If you successfully corrected the graph. Please tick &quot;Yes&quot; and submit the HIT.</label></h4>
+	</li>
+	<li>
+	<h4><label>If you find the graph is false while you have no idea how to correct it. Please tick &quot;No&quot; and write down why you don&#39;t know how to correct it. Then submit the HIT.</label></h4>
+	</li>
+</ul>
+<label> </label>
+
+<div class="form-row">
+<div class="col-sm-6"><label><input id="yes_chk" name="mutex_check" type="checkbox" value="checkbox" />Yes</label> <label> <input id="no_chk" name="mutex_check" type="checkbox" value="checkbox" />No</label></div>
+<input class="form-control" id="survey_box_id" name="survey_box" placeholder="Please write down why you don't know how to correct the graph" type="text" /></div>
+<!--<div class="column" id="add_delete_button">
+		<label><h3>Add new nodes:</h3></label>
+		<div class="col-md-12 column">
+			<button type="button" class="btn btn-default btn-warning" id="add">Add New Node</button>
+			<button type="button" class="btn btn-default btn-success" id="delete">Delete New Node</button>
+		</div>
+		<label><h3>Add new relations between two nodes:</h3></label>
+		<div class="col-md-12 column">
+		<button type="button" class="btn btn-default btn-warning" id="add_relation">Add New Relation</button>
+		<button type="button" class="btn btn-default btn-success" id="delete_relation">Delete New Relation</button>
+		</div>
+	</div>--> <!--<div class="col-md-12 row">
+			<button type="button" class="btn btn-default" disabled>SUBMIT</button>
+		</div>--> <crowd-button form-action="submit" id="submitButton">Submit</crowd-button> </crowd-form></section>
+<script src="https://assets.crowd.aws/crowd-html-elements.js"></script>
+<link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" rel="stylesheet" /><script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" /><script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style type="text/css">#collapseTrigger {
+        color: #fff;
+        display: block;
+        text-decoration: none;
+    }
+
+    #instructionBody table {
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
+    #instructionBody table caption {
+        text-align: left;
+        padding: 0 0 5px 0;
+    }
+</style>
+<script>
+	console.log("================================")
+
+	var image_id = "${Image_Id}"
+			//"${Image_Id}"
+
+	console.log(image_id)
+
+	var caption = "${Caption}"
+			//' the red picture hanging on a wall with a red background , white paint and white wall '
+			//"${Caption}"
+
+
+	var example_caption = " "+caption.trim()+" "
+	//' the red picture hanging on a wall with a red background , white paint and white wall '
+
+	console.log(example_caption)
+
+	//var example_image_url = ${Image_Url}
+
+	var example_caption_tokens = example_caption.split(' ')
+
+	var example_graph = "${Existing_Graph}".replace(/'/g,"\"")
+
+	var default_quantity_number = ['many','uncountable','one','two','three','four', 'five', 'one pair of','two pairs of','three pairs of','four pairs of', 'five pairs of', 'one group of', 'two groups of','three groups of','four groups of','five groups of', 'one slice of', 'two slices of', 'three slices of', 'four slices of', 'five slices of', 'one part of', 'two parts of', 'three parts of', 'four parts of', 'five parts of']
+
+	var mapping_type = ['Active', 'Passive']
+
+	//"${Existing_Graph}".replace(/'/g,"\"")
+	console.log(example_graph)
+	//'[{"Sub": "Node0", "Obj": "Node1", "Node0": "picture", "relation": "hang", "preposition": "on", "Node1": "wall" }, { "Sub": "Node0", "Obj": "Node2", "Node0": "picture", "relation": "has_attribute", "preposition":"no_preposition", "Node2": "red" }, {"Sub": "Node1", "Obj": "Node3", "Node1": "wall", "relation":"preposition_relation", "preposition": "with", "Node3": "background" }, {"Sub": "Node3", "Obj": "Node4", "Node3": "background", "relation": "has_attribute", "preposition":"no_preposition", "Node4": "red" }]'
+			//[{'Sub': 'Node0', 'Obj': 'Node1', 'Node0': 'gate', 'Node1': 'refrigerator', 'relation': 'no_verb', 'preposition': 'on side of'}]
+
+	var node_num = 0
+
+	const all_relation_parse = "${All_Relations}".replace(/'/g,"\"")
+			//'["has_attribute", "no_verb", "swing", "play"]'
+			//"${All_Relations}".replace(/'/g,"\"")
+	console.log(all_relation_parse)
+
+	var allrelation = Array.from(JSON.parse(all_relation_parse))
+	//['no_relation', 'hang', 'has_attribute', 'preposition_relation']
+
+	const all_preposition_parse = "${All_Prepositions}".replace(/'/g,"\"")
+			//'["on","in","with"]'
+			//"${All_Prepositions}".replace(/'/g,"\"")
+	console.log(all_preposition_parse)
+	var allprepositions = Array.from(JSON.parse(all_preposition_parse))
+	//['no_preposition', 'with', 'on']
+
+	var example_graph_json = JSON.parse(example_graph);
+	console.log(example_graph_json)
+	var example_node_set = {}
+
+	for (var i = 0; i < example_graph_json.length; i++) {
+		console.log(example_graph_json[i])
+		var nodes_relations = Object.keys(example_graph_json[i])
+		console.log(nodes_relations)
+		for (const e of nodes_relations) {
+			console.log(e)
+			if (e.startsWith('Node')){
+				example_node_set[e] = example_graph_json[i][e]
+			}
+		}
+	}
+
+	var example_node_list = Array.from(Object.keys(example_node_set)).sort()
+
+	node_num = example_node_list.length
+
+	const attr_parse = "${Attributes}".replace(/'/g,"\"")
+			//'["red", "white"]'
+			//"${Attributes}".replace(/'/g,"\"")
+	console.log(attr_parse)
+	let attributes = Array.from(JSON.parse(attr_parse))
+
+	var obj_only_nodes = new Set(attributes)
+
+	console.log("================================ node list ==============================")
+	console.log(example_node_list)
+
+
+	new Vue({
+        el: '#all',
+        data: {
+				caption: example_caption,
+			example_graph:example_graph_json,
+			example_nodes: example_node_list,
+			image_id: image_id
+        },
+        methods: {},
+        filters: {}
+    })
+
+	var subjects = [
+        "subject1","subject2","subject3"
+    ]
+    var relations = [
+		"relation1","relation2","relation3"
+    ]
+    var objects = [
+        "object1","object2","object3"
+    ]
+
+	function replaceOccurrence(string, regex, n, replace) {
+		var i = 0;
+		return string.replace(regex, function(match) {
+			i+=1;
+			if(i===n) return replace;
+			return match;
+		});
+	}
+
+	function style_word(text_id, word, css_style, occur_id) {
+		word = " "+word+" "
+		var html_text = $('#' + text_id).html()
+
+		//const text_value = html_text.value
+
+		var re = new RegExp(word,"g")
+		$('#' + text_id).html(replaceOccurrence(html_text, re, occur_id, "<span style='" + css_style + "'>" + word + "</span>"))
+		var current_html_text = $('#' + text_id).html()
+				//const current_text_value = current_html_text.value
+		console.log(new String(current_html_text))
+		console.log(new String(html_text))
+
+		return (html_text === current_html_text)
+	}
+
+	function de_style_word(text_id, word, css_style)
+	{
+		word = " "+word+" "
+		var html_text = $('#' + text_id).html()
+		//console.log("<span style=\"" + css_style + "\">" + word + "</span>")
+		var re = new RegExp("<span style=\"" + css_style + "\">" + word + "</span>","gi")
+		//console.log(re)
+		$('#' + text_id).html(replaceOccurrence(html_text, re, 1,  word))
+		var current_html_text = $('#' + text_id).html()
+		return (html_text === current_html_text)
+		//console.log($('#' + text_id).html())
+	}
+
+
+	var construct_remove_node_button = function(num){
+		var remove_button = $('<button>').attr({'style':"width:90%;height: 30px;margin-top: 5px;margin-bottom: 5px;"}).addClass('btn btn-default btn-success').text('Remove').click(function () {
+			remove_node(num)
+		})
+		return remove_button
+	}
+
+	var construct_remove_triple_button = function(triple_id){
+		var remove_button = $('<button>').attr({'style':"width:90%;height: 30px;margin-top: 5px;margin-bottom: 5px;"}).addClass('btn btn-default btn-success').text('Remove').click(function () {
+			remove_single_triple(triple_id)
+		})
+		return remove_button
+	}
+
+	var get_num_of_node = function(node_str)
+	{
+		let numberPattern = /\d+/g;
+
+		let node_num = node_str.match(numberPattern).join([])
+		return parseInt(node_num)
+	}
+
+	var get_n_gram = function(phrase_list, N_gram){
+		let n_gram_list = []
+		for (let i = 0; i < phrase_list.length-N_gram+1; i++) {
+			n_gram_list.push(phrase_list.slice(i,i+N_gram).join(' '))
+		}
+		return n_gram_list
+	}
+
+	var get_all_n_grams = function(phrase_list)
+	{
+		let all_n_grams = []
+		for (let i = 0; i < phrase_list.length; i++) {
+			const n_gram = i + 1
+			all_n_grams = all_n_grams.concat(get_n_gram(phrase_list, n_gram))
+		}
+		return all_n_grams
+	}
+
+	var de_update_freq = function(value_seg, dict){
+		//console.log(dict)
+		const value_list = value_seg.split(' ')
+		const all_n_grams = get_all_n_grams(value_list)
+		for (let value of all_n_grams) {
+			if (value in dict) {
+				dict[value] = dict[value] - 1
+				if (dict[value] == 0) {
+					delete dict[value]
+				}
+			}
+		}
+	}
+
+	var update_freq = function(value_seg, dict){
+		const value_list = value_seg.split(' ')
+		const all_n_grams = get_all_n_grams(value_list)
+		for (let value of all_n_grams) {
+			if (value in dict) {
+				dict[value] = dict[value] + 1
+			} else {
+				dict[value] = 1
+			}
+		}
+	}
+
+
+
+	var construct_select_group = function(sub_obj_ids, allrelation, construct_relation, default_predicate=null, default_select_type='relation')
+	{
+
+		let place_holder = {"relation":'Please select a correct verb between two nodes',
+			"preposition": 'Please select a correct preposition after the relation',
+			"sub_node":"Please select the subject node",
+			"obj_node":"Please select the object node",
+			"quantity":"Please select the number of objects",
+			"mapping_type": "Please select the verb type"
+		}
+		if (default_select_type=="sub_node" || default_select_type=="obj_node")
+		{
+			var select_attr = {'id':sub_obj_ids+"_select",
+				'style':"width:100%;height: 30px;"}
+		}else
+		{
+			var select_attr = {'name':sub_obj_ids, 'id':sub_obj_ids+"_select", 'required':"required",
+				'style':"width:90%;height: 30px;margin-top: 5px;margin-bottom: 5px;"}
+		}
+
+
+		var relation_select_group = $('<select>').attr(select_attr).append(
+				$('<option disabled selected value>').text(place_holder[default_select_type])
+		)
+		var relation_class = "col-md-10 row"
+		if (default_select_type=="sub_node" || default_select_type=="obj_node")
+		{
+			relation_class =  "btn-group"
+		}
+
+		var relation_group = $('<div>').addClass(relation_class).append(
+				relation_select_group
+		)
+		for (predicate of allrelation)
+		{
+			var option_group = $('<option>').addClass('opt-ans').text(predicate)
+			if (predicate == default_predicate)
+			{
+				option_group.attr({'selected':"selected"})
+			}
+			relation_select_group.append(option_group)
+
+		}
+		if (construct_relation==true)
+		{
+			relation_select_group.on('change', function()
+			{
+				var this_id = $(this)
+
+				var id_name = this_id.attr('id')
+
+				var relation_value = this_id.prop('selectedIndex')
+
+				var no_preposition_index = allprepositions.indexOf('no_preposition') + 1
+
+				var has_attr_index = allrelation.indexOf('has_attribute') + 1
+
+				if (relation_value == has_attr_index){
+					console.log(id_name.split('_').slice(0,-2).join('_') + "_preposition_select")
+					$("#"+id_name.split('_').slice(0,-2).join('_') + "_preposition_select").prop("selectedIndex", no_preposition_index);
+				}
+			})
+
+		}
+		return relation_group
+	}
+
+
+	var update_relation_selection = function(example_node_set, node_type='sub_node')
+	{
+		let add_relation_group = $('#add_relation_group')
+		if (node_type=='sub_node')
+		{
+			add_relation_group.children().eq(1).replaceWith(construct_select_group("add_relation_"+node_type, Array.from(Object.keys(example_node_set)).sort(), false, default_predicate=null, default_select_type=node_type))
+		}
+		else if (node_type=='obj_node')
+		{
+			add_relation_group.children().eq(2).replaceWith(construct_select_group("add_relation_"+node_type, Array.from(Object.keys(example_node_set)).sort(), false, default_predicate=null, default_select_type=node_type))
+
+		}
+
+	}
+
+
+	var example_node_list_dom = $('#example_node_list')
+
+	var node_count = {}
+
+
+	var new_relation_tuple = new Set()
+
+	var add_new_triples = new Set()
+	var new_node_record = {}
+	var is_style_word = {}
+	var add_node = function(node_num, node_name = "")
+	{
+		var node_group = $('<div>')
+				.addClass("form-group column").attr({'id': 'node_form_' + node_num})
+				.append($('<input>').addClass("form-control").attr({'type':'text', 'name':"Node_input_"+node_num, 'id':"node_input_"+node_num, 'placeholder':"Enter the node name in the caption", 'required':'required'}))
+
+
+
+		//.append($('<label>').addClass("col-sm-2 control-label").text("Node"+node_num))
+		//.append($('<div>').addClass("col-sm-12")
+
+
+		let remove_button = $('<td>').addClass('td').append(construct_remove_node_button(node_num))
+
+		var new_node_region = $('<tr>').attr({'id':"Node"+node_num})
+				.append($('<th>').addClass('th').attr({'scope':"row"}).text("Node"+node_num))
+				.append($('<td>').addClass('td').attr({'width': '200px'}).append(construct_select_group("Node" + node_num+"_quantity", default_quantity_number, false, 'one', default_select_type='quantity')))
+				.append($('<td>').addClass('td').append(node_group))
+				.append($('<td>').addClass('td').attr({'id':"Node" + node_num + '_text'}).text(example_caption))
+				.append(remove_button)
+
+		example_node_list_dom.append(new_node_region)
+
+
+		//construct_triple(node_id_sub, node_name_sub, tuple_order_left, node_id_obj, node_name_obj)
+		new_node_record["#Node" + node_num] = []
+		if (!(node_name==""))
+		{
+			new_node_record["#Node" + node_num].push(node_name)
+			update_freq(node_name, node_count)
+			is_style_word["Node" + node_num + '_text'] = !style_word("Node" + node_num + '_text', node_name, 'color:red', node_count[node_name])
+			$('#node_input_'+node_num).val(node_name)
+		}
+
+		example_node_set["Node"+node_num] = node_name
+
+
+		update_relation_selection(example_node_set, node_type='sub_node')
+		update_relation_selection(example_node_set, node_type='obj_node')
+		//.replaceWith(construct_select_group("add_relation_sub_node", Array.from(Object.keys(example_node_set)).sort(), false, default_predicate=null, default_select_type='sub_node'))
+
+
+
+
+		//let new_triples = build_new_triples()
+		//for (add_new_triple of new_triples){
+		//	add_new_triples.add(add_new_triple)
+		//}
+		//var example_graph = construct_triple(node_id_sub, node_name_sub, tuple_order_left, node_id_obj, node_name_obj)
+		//new_triples.push(tuple_order_left+"_triple")
+		//example_graph_dom.append(example_graph)
+
+		$("#node_input_"+node_num).each(function() {
+			var current_node_id = String(this.id).split('_')[2]
+			//console.log(current_node_id)
+			var elem = $(this);
+
+			// Save current value of element
+			elem.data('oldVal', elem.val());
+
+			// Look for changes in the value
+			elem.bind("propertychange change click keyup input paste", function(event){
+				// If value has changed...
+				if (elem.data('oldVal') != elem.val()) {
+					// Updated stored value
+					elem.data('oldVal', elem.val());
+					const check = elem.val().split(' ').every(val => example_caption_tokens.includes(val)) || elem.val()=="";
+					//console.log(check)
+					if (check) {
+						//console.log("enter block")
+						const current_node = elem.val()
+						if (new_node_record["#Node" + current_node_id].length == 1) {
+							var last_node = new_node_record["#Node" + current_node_id].pop()
+							//console.log(last_node)
+							if (!(last_node == "")) {
+								is_style_word["Node" + current_node_id + '_text'] = de_style_word("Node" + current_node_id + '_text', last_node, 'color:red')
+								de_update_freq(last_node, node_count)
+							}
+							new_node_record["#Node" + current_node_id].push(current_node)
+
+						}else {
+							new_node_record["#Node" + current_node_id].push(current_node)
+
+						}
+						//console.log(new_node_record)
+						if (!(elem.val()=="")) {
+							update_freq(current_node, node_count)
+							//console.log(node_count)
+
+							example_node_set["Node" + current_node_id] = current_node
+							//console.log(new_triples)
+
+							let check_style = !(style_word("Node" + current_node_id + '_text', current_node, 'color:red', node_count[current_node]))
+							is_style_word["Node" + current_node_id + '_text'] = check_style
+							if (check_style){
+								for (new_triple of new_relation_tuple)
+								{
+									console.log(new_triple.split('_').slice(0,-1).join('_') + "_Node" + current_node_id)
+									$('#'+new_triple.split('_').slice(0,-1).join('_') + "_Node" + current_node_id).html(current_node)
+								}
+							}
+
+						}else
+						{
+							for (new_triple of new_relation_tuple)
+							{
+								console.log(new_triple.split('_').slice(0,-1).join('_') + "_Node" + current_node_id)
+								$('#'+new_triple.split('_').slice(0,-1).join('_') + "_Node" + current_node_id).html(current_node)
+							}
+						}
+					}
+
+					//console.log(elem.val())
+				}
+			});
+			//style_word(example_node + '_text', example_node_set[example_node], 'color:red', node_count[example_node_set[example_node]])
+		});
+	}
+
+
+	for (example_node of example_node_list)
+	{
+		//console.log(example_node)
+
+		/*if (example_node_set[example_node] in node_count)
+		{
+			node_count[example_node_set[example_node]] = node_count[example_node_set[example_node]] + 1
+		}else
+		{
+			node_count[example_node_set[example_node]] = 1
+		}
+
+		let remove_button = $('<td>').addClass('td').append(construct_remove_node_button(get_num_of_node(example_node)))
+		var example_node_region = $('<tr>').attr({'id':example_node})
+				.append($('<th>').addClass('th').attr({'scope':"row"}).text(example_node))
+				.append($('<td>').addClass('td').text(example_node_set[example_node]))
+				.append($('<td>').addClass('td').attr({'id':example_node + '_text'}).text(example_caption))
+				.append(remove_button)
+
+
+
+		example_node_list_dom.append(example_node_region)
+		style_word(example_node + '_text', example_node_set[example_node], 'color:red', node_count[example_node_set[example_node]])*/
+
+		add_node(node_num=get_num_of_node(example_node), node_name = example_node_set[example_node])
+
+	}
+
+
+
+
+	var example_graph_dom = $('#example_graph')
+
+
+
+	var construct_triple = function(node_id_sub, node_name_sub, tuple_order_left, node_id_obj, node_name_obj)
+	{
+		var example_graph = $('<tr>').attr({'id':tuple_order_left+"_triple"})
+				.append($('<td>').addClass('td').text(node_id_sub))
+				.append($('<td>').addClass('td').attr({'id': tuple_order_left + '_' + node_id_sub}).text(node_name_sub))
+				.append($('<td>').addClass('td').append(construct_select_group(tuple_order_left+"_mapping", mapping_type, false, 'Active', default_select_type='mapping_type')))
+				.append($('<td>').addClass('td').append(construct_select_group(tuple_order_left + "_verb", allrelation, true)))
+				.append($('<td>').addClass('td').append(construct_select_group(tuple_order_left+"_preposition", allprepositions,false)))
+				.append($('<td>').addClass('td').text(node_id_obj))
+				.append($('<td>').addClass('td').attr({'id': tuple_order_left + '_' + node_id_obj}).text(node_name_obj))
+		.append($('<td>').addClass('td').append(construct_remove_triple_button(tuple_order_left)))
+		return example_graph
+	}
+
+
+
+
+
+
+
+
+	for (example_triple of example_graph_json)
+	{
+
+		let sub_id = example_triple['Sub']
+		let obj_id = example_triple['Obj']
+		new_relation_tuple.add(sub_id + "_" + obj_id+"_triple")
+		//console.log(sub_id)
+		//console.log(obj_id)
+
+		let sub_name = example_triple[sub_id]
+		let obj_name = example_triple[obj_id]
+
+		let relation_name = example_triple['relation']
+
+		let preposition_name = example_triple['preposition']
+
+		if (relation_name == 'has_attribute')
+		{
+			obj_only_nodes.add(obj_name)
+		}
+		const tuple_order_left = sub_id + "_" + obj_id
+		let example_graph = $('<tr>').attr({'id':sub_id + "_" + obj_id +"_triple"})
+				.append($('<td>').addClass('td').text(sub_id))
+				.append($('<td>').addClass('td').attr({'id': tuple_order_left + '_' + sub_id}).text(sub_name))
+				.append($('<td>').addClass('td').append(construct_select_group(sub_id + "_"+obj_id+"_mapping", mapping_type, false, 'Active', default_select_type='mapping_type')))
+				.append($('<td>').addClass('td').append(construct_select_group(sub_id + "_"+obj_id + "_verb", allrelation, true, relation_name)))
+				.append($('<td>').addClass('td').append(construct_select_group(sub_id + "_"+obj_id+"_preposition", allprepositions,false, preposition_name, default_select_type='preposition')))
+				.append($('<td>').addClass('td').text(obj_id))
+				.append($('<td>').addClass('td').attr({'id': tuple_order_left + '_' + obj_id}).text(obj_name))
+				.append($('<td>').addClass('td').append(construct_remove_triple_button(sub_id + "_" + obj_id)))
+
+		example_graph_dom.append(example_graph)
+
+	}
+
+
+
+
+
+
+
+
+	//$('#myDiv').changeWord('specialWord', 'sw');
+
+	 // Instructions expand/collapse
+    var content = $('#instructionBody');
+    var trigger = $('#collapseTrigger');
+    content.hide();
+    $('.collapse-text').text('(Click to expand)');
+    trigger.click(function () {
+        content.toggle();
+        var isVisible = content.is(':visible');
+        if (isVisible) {
+            $('.collapse-text').text('(Click to collapse)');
+        } else {
+            $('.collapse-text').text('(Click to expand)');
+        }
+    });
+
+	var remove_single_triple = function(tuple_order_left) {
+		$("#" + tuple_order_left + "_triple").remove();
+		new_relation_tuple.delete(tuple_order_left + "_triple")
+		add_new_triples.delete(tuple_order_left + "_triple")
+	}
+
+	var remove_triple = function(removed_node_id, example_node_set)
+	{
+		for (const [node_id, node_name] of Object.entries(example_node_set)) {
+			const tuple_order_left = removed_node_id + "_" + node_id
+			const tuple_order_right = node_id + "_" + removed_node_id
+
+			$("#"+tuple_order_left+"_triple").remove();
+			$("#"+tuple_order_right+"_triple").remove();
+			new_relation_tuple.delete(tuple_order_left+"_triple")
+			new_relation_tuple.delete(tuple_order_right+"_triple")
+			add_new_triples.delete(tuple_order_left+"_triple")
+		}
+	}
+
+
+	var remove_node = function(num){
+		var node_text = $('#node_input_' + num).val()
+		$("#Node" + num).remove();
+		if ("Node" + num in example_node_set) {
+			//new_node_record.remove("#Node" + num)
+			if ("#Node" + num in new_node_record) {
+				delete new_node_record["#Node" + num]
+			}
+			delete example_node_set["Node" + num]
+			delete is_style_word["Node" + num + '_text']
+			update_relation_selection(example_node_set, node_type='sub_node')
+			update_relation_selection(example_node_set, node_type='obj_node')
+			console.log(node_text)
+			de_update_freq(node_text, node_count)
+			remove_triple("Node" + num, example_node_set)
+		}
+		//build_new_triples()
+	};
+
+
+
+	//const result = PlayerTwo.every(val => PlayerOne.includes(val));
+
+
+
+	const add_relation_group = $('#add_relation_group')
+
+	add_relation_group.append(construct_select_group("add_relation_sub_node", Array.from(Object.keys(example_node_set)).sort(), false, default_predicate=null, default_select_type='sub_node'))
+	add_relation_group.append(construct_select_group("add_relation_obj_node", Array.from(Object.keys(example_node_set)).sort(), false, default_predicate=null, default_select_type='obj_node'))
+	//var delete_relation_group = $('#delete_relation_group')
+
+
+	$("#add_node").click(function () {
+	//	count the number of the triple arrary
+		let node_num = -1
+		if (!(Array.from(Object.keys(example_node_set)).length == 0))
+		{
+			let numberPattern = /\d+/g;
+
+			let num_list = []
+
+			for (let node_id_text of Array.from(Object.keys(example_node_set)))
+			{
+				num_list.push(parseInt(node_id_text.match(numberPattern).join([])))
+			}
+
+			let node_list = num_list.sort(function(a, b) {
+				return a - b;
+			});
+			 node_num = node_list[node_list.length-1]
+		}
+		add_node(node_num+1, "")
+		//node_num = node_num + 1
+	//	add a triple arrary at the last array
+		//construct_triple(number);
+    });
+
+	//$("#delete_node").click(function () {
+	//	count the number of the triple arrary
+	//	node_num = (node_num > const_node_num)? (node_num - 1) : (const_node_num)
+
+	//	remove_node(node_num)
+	//	delete the last array
+		//remove_triple(number);
+    //});
+
+	var add_delete_nodes = $('#add_delete_nodes')
+	add_delete_nodes.hide()
+
+	var add_delete_relations = $('#add_delete_relations')
+	add_delete_relations.hide()
+
+
+	$("#add_relation").click(function () {
+		//	count the number of the triple arrary
+		//let test_node = $('#add_relation_sub_node')
+		let node_id_sub = $('#add_relation_sub_node_select :selected').val()
+
+		let node_id_obj = $('#add_relation_obj_node_select :selected').val()
+
+		let node_name_sub = example_node_set[node_id_sub]
+
+		let node_name_obj = example_node_set[node_id_obj]
+
+		let tuple_order_left = node_id_sub+"_" + node_id_obj
+
+		let tuple_order_right = node_id_obj + "_" + node_id_sub
+
+		if (node_id_sub == "")
+		{
+			alert("Please select the subject node !!!")
+			return false
+		}
+
+		if (node_id_obj == "")
+		{
+			alert("Please select the object node !!!")
+			return false
+		}
+
+		//if (node_id_sub == node_id_obj)
+		//{
+		//	alert("The subject id should not be the same with the object id !!! Please change your selection.")
+		//	return false
+		//}
+		if (obj_only_nodes.has(node_name_sub))
+		{
+			alert("\[" + node_id_sub+"\]" + " is an attribute, which can only be object node !!! Please do not select it as a subject !!!")
+			return false
+		}
+			//console.log(tuple_order_left)
+			//console.log(tuple_order_right)
+			if ((new_relation_tuple.has(tuple_order_left+"_triple")) || (new_relation_tuple.has(tuple_order_right+"_triple")))
+			{
+				alert("There is already a relation between the subject node \[" + node_id_sub + "\] and the object node \[" + node_id_obj +"\]!!! If you find the existing relation between the subject node \[" + node_id_sub + "\] and the object node \[" + node_id_obj +"\] is incorrect, please remove the existing relation first and add a new relation.")
+				return false
+			}
+
+
+			let example_graph = construct_triple(node_id_sub, node_name_sub, tuple_order_left, node_id_obj, node_name_obj)
+			new_relation_tuple.add(tuple_order_left+"_triple")
+			add_new_triples.add(tuple_order_left+"_triple")
+			example_graph_dom.append(example_graph)
+
+
+
+		//node_num = node_num + 1
+		//	add a triple arrary at the last array
+		//construct_triple(number);
+	});
+
+
+
+	var yes_chk = $("#yes_chk");
+	var no_chk = $("#no_chk");
+	// inplement mutex of the checkbox
+
+	add_delete_nodes.show()
+	add_delete_relations.show()
+	$("#survey_box_id").hide()
+	//var no_dup_new_triples = []
+	no_chk.change(function () {
+		document.getElementById("yes_chk").checked = false;
+		if ($(this).is(":checked")) {
+			$("#survey_box_id").show()
+			//add_delete_nodes.show()
+			//add_delete_relations.show()
+			//no_dup_new_triples = build_new_triples()
+		}else{
+			$("#survey_box_id").hide()
+			//add_delete_nodes.hide()
+			//add_delete_relations.hide()
+			//remove_no_duplate_triple(no_dup_new_triples)
+			//no_dup_new_triples = []
+			//for (const [new_node_id, new_node_name] of Object.entries(new_node_record)) {
+			//	$(new_node_id).remove()
+			//	delete example_node_set[new_node_id.substr(1)]
+			//	remove_triple(new_node_id.substr(1), example_node_set)
+			//}
+			//new_node_record = {}
+			//build_new_triples()
+			//no_dup_new_triples = []
+			//new_triples = []
+		}
+
+	});
+	yes_chk.change(function () {
+		document.getElementById("no_chk").checked = false;
+		if ($(this).is(":checked")) {
+			$("#survey_box_id").hide()
+			//add_delete_nodes.hide()
+			//add_delete_relations.hide()
+
+		}
+	});
+
+
+
+    $('#crowd_form').on('submit',  function(event) {
+
+
+		if (!yes_chk.is(":checked") && !no_chk.is(":checked")) {
+			event.preventDefault();
+			event.stopPropagation();
+			alert('Please tick the box to indicate whether you think you correctly annotated the scene graph !!!');
+			return false
+		}
+
+		if (no_chk.is(":checked"))
+		{
+			return true
+		}
+
+		let node_id_str = Array.from(new_relation_tuple).join(' ')
+		console.log("==============style word ==============")
+		console.log(is_style_word)
+		for (const [node_id, node_name] of Object.entries(example_node_set)) {
+//|| !is_style_word[node_id + '_text']
+			if (node_name.trim()=="" || !(node_name.trim().split(' ').every(val => example_caption_tokens.includes(val))) || !is_style_word[node_id + '_text'])
+			{
+				alert(node_id + ' does not exist in caption : [[' + example_caption + ']]. Please go back to check your input at '+node_id + ' . Please note that this validation check is case sensitive.');
+				event.preventDefault();
+				event.stopPropagation();
+				return false
+			}
+
+			if (!(node_id_str.includes(node_id)) && !(Object.keys(example_node_set).length == 1))
+			{
+				alert(node_id + ' does not connect with other nodes !!! Please remove this node.' )
+				event.preventDefault();
+				event.stopPropagation();
+				return false
+			}
+		}
+
+			return true
+
+    });
+
+
+	/*document.querySelector('crowd-form').onsubmit = function() {
+		if (!yes_chk.is(":checked") && !no_chk.is(":checked")) {
+			alert('Please click the box to indicate whether current presented graph is complete or not !!!');
+			return false
+		}else{
+			return true
+		}
+	};*/
+
+	/*document.getElementById('submitButton').onclick = function() {
+		flag = false
+		if (flag) {
+			document.querySelector('crowd-form').submit();
+		}else{
+			console.log("test submit ========")
+		}
+		return false
+		//document.querySelector('crowd-form').submit();
+	};*/
+</script>
