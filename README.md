@@ -6,7 +6,7 @@ This repository contains the code and dataset for the paper [FACTUAL: A Benchmar
 ### FACTUAL Scene Graph dataset:
 FACTUAL Scene Graph dataset includes 40,369 instances.
 ```angular2html
-data/sg/factual_sg.csv
+data/factual_sg/factual_sg.csv
 ```
 or load from huggingface data hub
 ```angular2html
