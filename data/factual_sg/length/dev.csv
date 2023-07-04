@@ -938,7 +938,7 @@ image_id,region_id,caption,scene_graph
 2391162,1180269,the clock is on the wall,"( clock , on , wall )"
 2390838,1196077,left section of the skating ramp,"( skating ramp , have , left section )"
 2379234,1553135,child sized snow skis,"( snow skis , is , child sized )"
-2374916,1758438,there are 2 zebras,"( zebras , is , 2) , (zebras )"
+2374916,1758438,there are 2 zebras,"( zebras , is , 2 )"
 2411797,182912,a little boy skiing on the snow,"( boy , is , little) , (boy , ski on , snow )"
 2323382,4615910,the person is flying a kite .,"( person , fly , kite )"
 2409055,264599,side rear view mirror on a vehicle,"( mirror , on , vehicle) , (mirror , is , rear view) , (mirror , is , side view )"
