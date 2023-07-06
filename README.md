@@ -49,6 +49,15 @@ We clean the VG dataset so it does not include empty instances. The dataset incl
 
 ## FACTUAL Scene Graph Parsing Model
 
+Random:
+
+|  | Set Match | SPICE |
+| -------- | -------- | -------- |
+| Flan-T5-large   | 80.17   | 92.64   |
+| Flan-T5-large    | -   | -   |
+
+
+
 ## FACTUAL-MR Scene Graph Parsing Model
 
 ## Soft-SPICE
