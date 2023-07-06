@@ -55,7 +55,8 @@ flan-t5 models trained on Random split:
 | -------- | -------- | -------- |
 | Flan-T5-large   | 80.17   | 92.64   |
 | Flan-T5-base    | -   | -   |
-| (pretrain + fine-tune) | Flan-T5-large    | -   | -   |
+| (pretrain + fine-tune) Flan-T5-large    | -   | -   |
+| (pretrain + fine-tune) Flan-T5-base    | -   | -   |
 
 
 
