@@ -80,7 +80,7 @@ tokenizer.decode(generated_ids[0], skip_special_tokens=True, clean_up_tokenizati
 
 ```
 
-Generate Scene Graph: the pig is flying on the mountain.
+Note here 'is' is referred to as 'has_attribute'.
 
 ## FACTUAL-MR Scene Graph Parsing Model
 
