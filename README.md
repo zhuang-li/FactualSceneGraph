@@ -51,12 +51,12 @@ We clean the VG dataset so it does not include empty instances. The dataset incl
 
 flan-t5 models trained on Random split:
 
-|  | Set Match | SPICE |
+|  | Set Match | SPICE |HF Model Weight|
 | -------- | -------- | -------- |
-| [Flan-T5-large](lizhuang144/flan-t5-large-factual-sg)   | 80.17   | 92.64   |
-| Flan-T5-base    | -   | -   |
-| (pretrain + fine-tune) Flan-T5-large    | -   | -   |
-| (pretrain + fine-tune) Flan-T5-base    | -   | -   |
+| Flan-T5-large   | 80.17   | 92.64   |lizhuang144/flan-t5-large-factual-sg|
+| Flan-T5-base    | -   | -   | - |
+| (pretrain + fine-tune) Flan-T5-large    | -   | -   | - |
+| (pretrain + fine-tune) Flan-T5-base    | -   | -   | - |
 
 
 
