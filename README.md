@@ -60,6 +60,26 @@ flan-t5 models trained on Random split:
 
 Usage Example:
 
+```
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+tokenizer = AutoTokenizer.from_pretrained("lizhuang144/flan-t5-base-factual-sg")
+model = AutoModelForSeq2SeqLM.from_pretrained("lizhuang144/flan-t5-base-factual-sg")
+text = tokenizer("Generate Scene Graph: 2 pigs are flying on the sky with 2 bags on their backs", max_length=200, return_tensors="pt", truncation=True)
+generated_ids = model.generate(
+    text["input_ids"],
+    attention_mask=text["attention_mask"],
+    use_cache=True,
+    decoder_start_token_id=tokenizer.pad_token_id,
+    num_beams=1,
+    max_length=200,
+    early_stopping=True
+)
+tokenizer.decode(generated_ids[0], skip_special_tokens=True, clean_up_tokenization_spaces=True)
+
+`( pigs, is, 2), (bags, on back of, pigs), (bags, is, 2), (pigs, fly on, sky )`
+
+```
+
 Generate Scene Graph: the pig is flying on the mountain.
 
 ## FACTUAL-MR Scene Graph Parsing Model
