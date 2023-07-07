@@ -49,6 +49,39 @@ We clean the VG dataset so it does not include empty instances. The dataset incl
 
 ## FACTUAL Scene Graph Parsing Model
 
+flan-t5 models trained on Random split:
+
+|  | Set Match | SPICE |HF Model Weight|
+| -------- | -------- | -------- |-------- |
+| Flan-T5-large   | 80.17   | 92.64   |[lizhuang144/flan-t5-large-factual-sg](https://huggingface.co/lizhuang144/flan-t5-large-factual-sg)|
+| Flan-T5-base    | 79.44   | 92.24   | [lizhuang144/flan-t5-base-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-factual-sg) |
+| (pretrain + fine-tune) Flan-T5-large    | 80.63   | 92.97   | [lizhuang144/flan-t5-large-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg) |
+| (pretrain + fine-tune) Flan-T5-base    | 80.50   | 92.92   | [lizhuang144/flan-t5-base-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg) |
+
+Usage Example:
+
+```
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+tokenizer = AutoTokenizer.from_pretrained("lizhuang144/flan-t5-base-factual-sg")
+model = AutoModelForSeq2SeqLM.from_pretrained("lizhuang144/flan-t5-base-factual-sg")
+text = tokenizer("Generate Scene Graph: 2 pigs are flying on the sky with 2 bags on their backs", max_length=200, return_tensors="pt", truncation=True)
+generated_ids = model.generate(
+    text["input_ids"],
+    attention_mask=text["attention_mask"],
+    use_cache=True,
+    decoder_start_token_id=tokenizer.pad_token_id,
+    num_beams=1,
+    max_length=200,
+    early_stopping=True
+)
+tokenizer.decode(generated_ids[0], skip_special_tokens=True, clean_up_tokenization_spaces=True)
+
+`( pigs, is, 2), (bags, on back of, pigs), (bags, is, 2), (pigs, fly on, sky )`
+
+```
+
+Note here 'is' is referred to as 'has_attribute'.
+
 ## FACTUAL-MR Scene Graph Parsing Model
 
 ## Soft-SPICE
