@@ -56,7 +56,7 @@ flan-t5 models trained on Random split:
 | Flan-T5-large   | 80.17   | 92.64   |[lizhuang144/flan-t5-large-factual-sg](https://huggingface.co/lizhuang144/flan-t5-large-factual-sg)|
 | Flan-T5-base    | 79.44   | 92.24   | [lizhuang144/flan-t5-base-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-factual-sg) |
 | (pretrain + fine-tune) Flan-T5-large    | -   | -   | - |
-| (pretrain + fine-tune) Flan-T5-base    | -   | -   | - |
+| (pretrain + fine-tune) Flan-T5-base    | 80.50   | 92.92   | [lizhuang144/flan-t5-base-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg) |
 
 Usage Example:
 
