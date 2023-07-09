@@ -4,7 +4,7 @@ This repository contains the code and dataset for the paper [FACTUAL: A Benchmar
 
 ## Dataset
 ### FACTUAL Scene Graph dataset:
-FACTUAL Scene Graph dataset includes 40,369 instances.
+FACTUAL Scene Graph dataset includes 40,369 instances. All the FACTUAL-MRs have been converted into scene graphs with the words in the graphs lemmatized. As we mentioned in the paper, there are several ways to convert the FACTUAL-MRs into scene graphs. Here is the collective way.
 ```angular2html
 data/factual_sg/factual_sg.csv
 ```
@@ -37,7 +37,7 @@ scene_graph: the scene graph of the image region and caption
 Please refer to [Visual Genome](https://huggingface.co/datasets/visual_genome) to find the images and regions given the image and region ids.
 
 ### FACTUAL-MR dataset:
-FACTUAL-MR dataset is annotated with FACTUAL-MR instead of conventional scene graph for the ease of annotation.
+FACTUAL-MR dataset is annotated with FACTUAL-MR instead of a conventional scene graph for ease of annotation.
 todo: add cleaned FACTUAL-MR dataset
 
 ### VG Scene Graph dataset:
