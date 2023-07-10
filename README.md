@@ -61,7 +61,7 @@ flan-t5 models trained on scene graphs of Random split:
 | (pretrain + fine-tune) Flan-T5-small    | 79.77   | 92.76   | [lizhuang144/flan-t5-small-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg) |
 
 
-Note that we removed the node index in the dataset training these models, so the different nodes with the same names won't be distinguished by their indexes. The identifier of passive (i.e. 'p:') has also been removed. The verb and prepositions are concatenated together as well.
+**Note** that we removed the node index in the dataset training these models, so the different nodes with the same names won't be distinguished by their indexes. The identifier of passive (i.e. 'p:') has also been removed. The verb and prepositions are concatenated together as well. Such a format loses some information from FACTUAL-MR while the format is compatible with the scene graphs in Visual Genome.
 
 Usage Example:
 
