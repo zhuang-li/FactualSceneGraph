@@ -49,7 +49,7 @@ We clean the VG dataset so it does not include empty instances. The dataset incl
 
 ## FACTUAL Scene Graph Parsing Model
 
-flan-t5 models trained on Random split:
+flan-t5 models trained on scene graphs of Random split:
 
 |  | Set Match | SPICE |HF Model Weight|
 | -------- | -------- | -------- |-------- |
@@ -59,6 +59,9 @@ flan-t5 models trained on Random split:
 | (pretrain + fine-tune) Flan-T5-large    | 81.30   | 93.17   | [lizhuang144/flan-t5-large-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg) |
 | (pretrain + fine-tune) Flan-T5-base    | 81.50   | 93.33   | [lizhuang144/flan-t5-base-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg) |
 | (pretrain + fine-tune) Flan-T5-small    | 79.77   | 92.76   | [lizhuang144/flan-t5-small-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg) |
+
+
+Note that we removed the node index in the dataset training these models, so the different nodes with the same names won't be distinguished by their indexes. The identifier of passive (i.e. 'p:') has also been removed. The verb and prepositions are concatenated together as well.
 
 Usage Example:
 
