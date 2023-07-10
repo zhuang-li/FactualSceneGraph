@@ -49,7 +49,7 @@ We clean the VG dataset so it does not include empty instances. The dataset incl
 
 ## FACTUAL Scene Graph Parsing Model
 
-flan-t5 models trained on scene graphs of Random split:
+flan-t5 models trained on scene graph dataset in the Random split:
 
 |  | Set Match | SPICE |HF Model Weight|
 | -------- | -------- | -------- |-------- |
