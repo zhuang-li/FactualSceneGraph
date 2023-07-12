@@ -93,11 +93,24 @@ Note here 'is' is referred to as 'has_attribute'.
 
 ## Citation
 ```
-@article{li2023factual,
-  title={FACTUAL: A Benchmark for Faithful and Consistent Textual Scene Graph Parsing},
-  author={Li, Zhuang and Chai, Yuyang and Yue, Terry Zhuo and Qu, Lizhen and Haffari, Gholamreza and Li, Fei and Ji, Donghong and Tran, Quan Hung},
-  journal={arXiv preprint arXiv:2305.17497},
-  year={2023}
+@inproceedings{li-etal-2023-factual,
+    title = "{FACTUAL}: A Benchmark for Faithful and Consistent Textual Scene Graph Parsing",
+    author = "Li, Zhuang  and
+      Chai, Yuyang  and
+      Zhuo, Terry Yue  and
+      Qu, Lizhen  and
+      Haffari, Gholamreza  and
+      Li, Fei  and
+      Ji, Donghong  and
+      Tran, Quan Hung",
+    booktitle = "Findings of the Association for Computational Linguistics: ACL 2023",
+    month = jul,
+    year = "2023",
+    address = "Toronto, Canada",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2023.findings-acl.398",
+    pages = "6377--6390",
+    abstract = "Textual scene graph parsing has become increasingly important in various vision-language applications, including image caption evaluation and image retrieval. However, existing scene graph parsers that convert image captions into scene graphs often suffer from two types of errors. First, the generated scene graphs fail to capture the true semantics of the captions or the corresponding images, resulting in a lack of faithfulness. Second, the generated scene graphs have high inconsistency, with the same semantics represented by different annotations.To address these challenges, we propose a novel dataset, which involves re-annotating the captions in Visual Genome (VG) using a new intermediate representation called FACTUAL-MR. FACTUAL-MR can be directly converted into faithful and consistent scene graph annotations. Our experimental results clearly demonstrate that the parser trained on our dataset outperforms existing approaches in terms of faithfulness and consistency. This improvement leads to a significant performance boost in both image caption evaluation and zero-shot image retrieval tasks. Furthermore, we introduce a novel metric for measuring scene graph similarity, which, when combined with the improved scene graph parser, achieves state-of-the-art (SOTA) results on multiple benchmark datasets for the aforementioned tasks.",
 }
 ```
 
