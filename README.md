@@ -87,6 +87,10 @@ tokenizer.decode(generated_ids[0], skip_special_tokens=True, clean_up_tokenizati
 
 Note here 'is' is referred to as 'has_attribute'.
 
+### Scene Graph Parsers with node indexes and passive identifiers
+
+% to do: train the models with dataset annotated with scene graphs with node indexes and passive identifiers
+
 ## FACTUAL-MR Scene Graph Parsing Model
 
 ## Soft-SPICE
