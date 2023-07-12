@@ -51,6 +51,8 @@ We clean the VG dataset so it does not include empty instances. The dataset incl
 
 flan-t5 models trained on scene graph dataset in the Random split:
 
+### Scene Graph Parsers without node indexes and passive identifiers
+
 |  | Set Match | SPICE |HF Model Weight|
 | -------- | -------- | -------- |-------- |
 | Flan-T5-large   | 80.17   | 92.64   |[lizhuang144/flan-t5-large-factual-sg](https://huggingface.co/lizhuang144/flan-t5-large-factual-sg)|
