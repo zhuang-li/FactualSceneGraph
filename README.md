@@ -69,8 +69,8 @@ Usage Example:
 
 ```
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-tokenizer = AutoTokenizer.from_pretrained("lizhuang144/flan-t5-base-factual-sg")
-model = AutoModelForSeq2SeqLM.from_pretrained("lizhuang144/flan-t5-base-factual-sg")
+tokenizer = AutoTokenizer.from_pretrained("lizhuang144/flan-t5-base-VG-factual-sg")
+model = AutoModelForSeq2SeqLM.from_pretrained("lizhuang144/flan-t5-base-VG-factual-sg")
 text = tokenizer("Generate Scene Graph: 2 pigs are flying on the sky with 2 bags on their backs", max_length=200, return_tensors="pt", truncation=True)
 generated_ids = model.generate(
     text["input_ids"],
