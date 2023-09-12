@@ -53,8 +53,9 @@ flan-t5 models trained on scene graph dataset in the Random split:
 
 ### Scene Graph Parsers without node indexes and passive identifiers
 
-|  | Set Match | SPICE |HF Model Weight|
+|  | Set Match | SPICE |Model Weight|
 | -------- | -------- | -------- |-------- |
+| SPICE Parser   | 13.00 | 56.15   |[SPICE](https://github.com/yychai74/modified-SPICE-score)|
 | Flan-T5-large   | 80.17   | 92.64   |[lizhuang144/flan-t5-large-factual-sg](https://huggingface.co/lizhuang144/flan-t5-large-factual-sg)|
 | Flan-T5-base    | 80.70   | 92.72   | [lizhuang144/flan-t5-base-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-factual-sg) |
 | Flan-T5-small    | 77.72   | 91.67   | [lizhuang144/flan-t5-small-factual-sg](https://huggingface.co/lizhuang144/flan-t5-small-factual-sg) |
@@ -62,8 +63,9 @@ flan-t5 models trained on scene graph dataset in the Random split:
 | (pretrain + fine-tune) Flan-T5-base    | 81.50   | 93.33   | [lizhuang144/flan-t5-base-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg) |
 | (pretrain + fine-tune) Flan-T5-small    | 79.77   | 92.76   | [lizhuang144/flan-t5-small-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg) |
 
+As the table demonstrates, the predominant [SPICE parser](https://panderson.me/images/SPICE.pdf) parser—created 7 years ago and widely integrated into numerous research projects and practical applications—falls dramatically short in performance metrics. With only a 13% exact match rate and a SPICE score of just 56.15, it's clear that this tool is far from optimal. Let's move forward by adopting a more robust and efficient parser!
 
-!!!**Note** that we removed the node index in the dataset when training these models, so the different nodes with the same names won't be distinguished by their indexes. The identifier of passive (i.e. 'p:') has also been removed. The verb and prepositions are concatenated together as well. Such a format loses some information from FACTUAL-MR while the format is compatible with the scene graphs in Visual Genome such that it can be applied to the downstream tasks of scene graphs.
+!!!**Note** that we removed the node index in the dataset when training these models, so the different nodes with the same names won't be distinguished by their indexes. The identifier of passive (i.e. 'p:') has also been removed. The verbs and prepositions are concatenated together as well. Such a format loses some information from FACTUAL-MR while the format is compatible with the scene graphs in Visual Genome such that it can be applied to the downstream tasks of scene graphs.
 
 Usage Example:
 
