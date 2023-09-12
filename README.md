@@ -55,7 +55,7 @@ flan-t5 models trained on scene graph dataset in the Random split:
 
 |  | Set Match | SPICE |Model Weight|
 | -------- | -------- | -------- |-------- |
-| SPICE Parser   | 13.00 | 56.15   |[SPICE](https://github.com/yychai74/modified-SPICE-score)|
+| SPICE Parser   | 13.00 | 56.15   |[modified-SPICE-score](https://github.com/yychai74/modified-SPICE-score)|
 | Flan-T5-large   | 80.17   | 92.64   |[lizhuang144/flan-t5-large-factual-sg](https://huggingface.co/lizhuang144/flan-t5-large-factual-sg)|
 | Flan-T5-base    | 80.70   | 92.72   | [lizhuang144/flan-t5-base-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-factual-sg) |
 | Flan-T5-small    | 77.72   | 91.67   | [lizhuang144/flan-t5-small-factual-sg](https://huggingface.co/lizhuang144/flan-t5-small-factual-sg) |
