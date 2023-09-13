@@ -4,9 +4,9 @@ This repository contains the code and dataset for the paper [FACTUAL: A Benchmar
 
 
 <p align="center" float="left">
-  <img src="images/monash_logo.png" height="40" />
-  <img src="images/adobe_logo.png" height="40" />
-  <img src="images/wuhan_logo.png" height="40" />
+  <img src="logo/monash_logo.png" height="40" />
+  <img src="logo/adobe_logo.png" height="40" />
+  <img src="logo/wuhan_logo.png" height="40" />
 </p>
 
 ## Dataset
