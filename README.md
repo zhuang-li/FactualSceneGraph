@@ -2,6 +2,13 @@
 
 This repository contains the code and dataset for the paper [FACTUAL: A Benchmark for Faithful and Consistent Textual Scene Graph Parsing](https://arxiv.org/pdf/2305.17497.pdf) (ACL 2023).
 
+
+<p align="center" float="left">
+  <img src="images/" height="40" />
+  <img src="images/" height="40" />
+  <img src="images/" height="40" />
+</p>
+
 ## Dataset
 ### FACTUAL Scene Graph dataset:
 FACTUAL Scene Graph dataset includes 40,369 instances. The scene graphs are converted from FACTUAL-MRs with the words in the graphs lemmatized. As we mentioned in the paper, there are several ways to convert the FACTUAL-MRs into scene graphs. Here is the collective way.
@@ -47,7 +54,7 @@ sg_dataset = load_dataset('lizhuang144/VG_scene_graph_clean')
 ```
 We clean the VG dataset so it does not include empty instances. The dataset includes 2.9 million instances.
 
-### FACTUAL Scene Graph dataset:
+### FACTUAL Scene Graph dataset with identifiers:
 load from huggingface data hub
 ```angular2html
 sg_dataset = load_dataset('lizhuang144/FACTUAL_Scene_Graph_ID')
@@ -55,7 +62,7 @@ sg_dataset = load_dataset('lizhuang144/FACTUAL_Scene_Graph_ID')
 The data instances contain identifiers that help determine whether a word in a predicate is a verb, as well as whether it is in the passive tense. Additionally, indexes of nodes are included to distinguish between nodes that share the same name.
 ## FACTUAL Scene Graph Parsing Model
 
-The flan-t5 models are trained and evaluated on the training and test sets of the Random split. The SPICE parser is evaluated on the test set of the Random split.
+The flan-t5 models are trained and evaluated on the training and test sets of the Random split. The SPICE parser is evaluated on the test set of the Random split. (pre-train + fine-tune) means the parser is pre-trained on the 3 million VG instances and fine-tuned on the FACTUAL dataset.
 
 ### Scene Graph Parsers without node indexes and passive identifiers
 
