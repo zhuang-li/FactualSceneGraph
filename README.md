@@ -47,6 +47,12 @@ sg_dataset = load_dataset('lizhuang144/VG_scene_graph_clean')
 ```
 We clean the VG dataset so it does not include empty instances. The dataset includes 2.9 million instances.
 
+### FACTUAL Scene Graph dataset:
+load from huggingface data hub
+```angular2html
+sg_dataset = load_dataset('lizhuang144/FACTUAL_Scene_Graph_ID')
+```
+The data instances contain identifiers that help determine whether a word in a predicate is a verb, as well as whether it is in the passive tense. Additionally, indexes of nodes are included to distinguish between nodes that share the same name.
 ## FACTUAL Scene Graph Parsing Model
 
 The flan-t5 models are trained and evaluated on the training and test sets of the Random split. The SPICE parser is evaluated on the test set of the Random split.
