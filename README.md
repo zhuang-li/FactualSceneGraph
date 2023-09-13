@@ -2,6 +2,13 @@
 
 This repository contains the code and dataset for the paper [FACTUAL: A Benchmark for Faithful and Consistent Textual Scene Graph Parsing](https://arxiv.org/pdf/2305.17497.pdf) (ACL 2023).
 
+
+<p align="center" float="left">
+  <img src="images/" height="40" />
+  <img src="images/" height="40" />
+  <img src="images/" height="40" />
+</p>
+
 ## Dataset
 ### FACTUAL Scene Graph dataset:
 FACTUAL Scene Graph dataset includes 40,369 instances. The scene graphs are converted from FACTUAL-MRs with the words in the graphs lemmatized. As we mentioned in the paper, there are several ways to convert the FACTUAL-MRs into scene graphs. Here is the collective way.
