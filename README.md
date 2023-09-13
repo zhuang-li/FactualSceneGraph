@@ -11,7 +11,7 @@ This repository contains the code and dataset for the paper [FACTUAL: A Benchmar
 
 ## Dataset
 ### FACTUAL Scene Graph dataset:
-FACTUAL Scene Graph dataset includes 40,369 instances. The scene graphs are converted from FACTUAL-MRs with the words in the graphs lemmatized. As we mentioned in the paper, there are several ways to convert the FACTUAL-MRs into scene graphs. Here is the collective way.
+FACTUAL Scene Graph dataset includes 40,369 instances. The scene graphs are converted from FACTUAL-MRs with the words in the predicates/relations of the graphs lemmatized. As we mentioned in the paper, there are several ways to convert the FACTUAL-MRs into scene graphs. Here is the collective way.
 ```angular2html
 data/factual_sg/factual_sg.csv
 ```
