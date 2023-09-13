@@ -55,7 +55,7 @@ sg_dataset = load_dataset('lizhuang144/FACTUAL_Scene_Graph_ID')
 The data instances contain identifiers that help determine whether a word in a predicate is a verb, as well as whether it is in the passive tense. Additionally, indexes of nodes are included to distinguish between nodes that share the same name.
 ## FACTUAL Scene Graph Parsing Model
 
-The flan-t5 models are trained and evaluated on the training and test sets of the Random split. The SPICE parser is evaluated on the test set of the Random split.
+The flan-t5 models are trained and evaluated on the training and test sets of the Random split. The SPICE parser is evaluated on the test set of the Random split. (pre-train + fine-tune) means the parser is pre-trained on the 3 million VG instances and fine-tuned on the FACTUAL dataset.
 
 ### Scene Graph Parsers without node indexes and passive identifiers
 
