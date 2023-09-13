@@ -100,7 +100,7 @@ These improvements in scene graph parsing offer several benefits over the origin
 
 |  | Set Match | SPICE |Model Weight|
 | -------- | -------- | -------- |-------- |
-| (pretrain + fine-tune) Flan-T5-large    | 81.30   | 93.17   | [lizhuang144/flan-t5-large-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg-id) |
+| (pretrain + fine-tune) Flan-T5-large    | 80.57   | 92.97   | [lizhuang144/flan-t5-large-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg-id) |
 | (pretrain + fine-tune) Flan-T5-base    | 80.70   | 92.89   | [lizhuang144/flan-t5-base-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg-id) |
 | (pretrain + fine-tune) Flan-T5-small    | 78.38   | 91.93   | [lizhuang144/flan-t5-small-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg-id) |
 
