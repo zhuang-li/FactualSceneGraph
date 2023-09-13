@@ -47,7 +47,7 @@ sg_dataset = load_dataset('lizhuang144/VG_scene_graph_clean')
 ```
 We clean the VG dataset so it does not include empty instances. The dataset includes 2.9 million instances.
 
-### FACTUAL Scene Graph dataset:
+### FACTUAL Scene Graph dataset with identifiers:
 load from huggingface data hub
 ```angular2html
 sg_dataset = load_dataset('lizhuang144/FACTUAL_Scene_Graph_ID')
