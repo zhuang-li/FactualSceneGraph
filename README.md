@@ -107,7 +107,7 @@ Note here 'is' is referred to as 'has_attribute'.
 ### Scene Graph Parsers with node indexes and verb identifiers
 This type of scene graph parsing generates a detailed scene graph, complete with verb identifiers and node indexes, based on the input text provided. To illustrate, the sentence "a monkey is sitting next to another monkey" would be parsed into the scene graph "( monkey, v:sit next to, monkey:1 )". In this graph, the prefix "v:" specifies that "sit" functions as the verb, while the suffix ":1" denotes that the second "monkey" is distinct from the first.
 
-Similarly, the sentence "a car is parked on the ground" would be translated into the scene graph "( car, pv:park, on, ground )". In this case, the prefix "pv:" indicates that "park" is a passive verb.
+Similarly, the sentence "a car is parked on the ground" would be translated into the scene graph "( car, pv:park, on, ground )". In this case, the prefix "pv:" indicates that "park" is a passive verb. We highlight passive verbs as the order of nodes in the scene graphs is very important.
 
 These improvements in scene graph parsing offer several benefits over the original scene graphs used in the Visual Genome. For instance, in the original VG scene graph, nodes with identical names couldn't be differentiated. Our enhanced parsing approach solves this issue by adding indexes to uniquely identify nodes with the same name. Additionally, we annotate each predicate with the corresponding verb and its tense. These added features enrich the scene graph with more fine-grained information, enhancing its utility for downstream tasks.
 
