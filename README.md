@@ -70,6 +70,8 @@ As the table demonstrates, the predominant [SPICE parser](https://panderson.me/i
 
 !!!**Note** that we removed the node index in the dataset when training these models, so the different nodes with the same names won't be distinguished by their indexes. The identifier of passive (i.e. 'p:') has also been removed. The verbs and prepositions are concatenated together as well. Such a format loses some information from FACTUAL-MR while the format is compatible with the scene graphs in Visual Genome such that it can be applied to the downstream tasks of scene graphs.
 
+
+
 **Usage Example**:
 
 ```python
@@ -97,6 +99,7 @@ generated_ids = model.generate(
 
 print(tokenizer.decode(generated_ids[0], skip_special_tokens=True, clean_up_tokenization_spaces=True))
 # Output: `( pigs, is, 2), (bags, on back of, pigs), (bags, is, 2), (pigs, fly on, sky )`
+```
 
 Note here 'is' is referred to as 'has_attribute'.
 
@@ -121,6 +124,7 @@ These improvements in scene graph parsing offer several benefits over the origin
 ## Citation
 
 To cite this work, please use the following Bibtex entry:
+
 ```
 @inproceedings{li-etal-2023-factual,
     title = "{FACTUAL}: A Benchmark for Faithful and Consistent Textual Scene Graph Parsing",
