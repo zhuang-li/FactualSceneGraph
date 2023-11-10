@@ -120,7 +120,7 @@ Enhanced scene graph parsing includes detailed annotations such as verb identifi
   Here, "v:" indicates a verb, and ":1" differentiates the second "monkey" as a unique entity.
 
 - For "A car is parked on the ground", the scene graph is:
-  `( car, pv:park, on, ground )`
+  `( car, pv:park on, ground )`
   The "pv:" prefix highlights "park" as a passive verb, underscoring the significance of node order in the graph.
 
 This advanced parsing technique offers substantial enhancements over the original Visual Genome (VG) scene graphs by:
