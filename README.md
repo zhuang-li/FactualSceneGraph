@@ -54,7 +54,7 @@ The FACTUAL Scene Graph dataset includes 40,369 instances with lemmatized predic
 
 ### Simplified Model Training Without Node Indexes and Passive Identifiers
 
-The following table shows the performance comparison of various scene graph parsing models. Notably, the original SPICE parser exhibits lower performance relative to more recent models.
+The following table shows the performance comparison of various scene graph parsing models. Notably, the original SPICE parser performs worse than our more recent models.
 
 #### Performance Metrics Explained:
 - **SPICE F-score**: A metric that measures the similarity between candidate and reference scene graph representations derived from captions. It assesses the quality of scene graph parsing by evaluating how well the parser's output matches the ground truth graph in terms of propositional content.
