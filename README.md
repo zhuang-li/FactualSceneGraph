@@ -58,8 +58,7 @@ The following table shows the performance comparison of various scene graph pars
 
 #### Performance Metrics Explained:
 - **SPICE F-score**: A metric that measures the similarity between candidate and reference scene graph representations derived from captions. It assesses the quality of scene graph parsing by evaluating how well the parser's output matches the ground truth graph in terms of propositional content.
-- **Exact Set Match**: Customized from [Yu et al., 2019](https://aclanthology.org/P19-1443/), this metric determines the accuracy of the parsers by checking if the parsed strings of facts match the ground truth, ignoring the order of the facts. It is a strict measure of accuracy that requires the candidate facts to be exactly the same as the ground truth facts.
-
+- **Exact Set Match**: Adapted from the methodology described by [Yu et al., 2019](https://aclanthology.org/P19-1443/), this metric evaluates the parser's accuracy by verifying whether the strings of parsed facts match the ground truth facts, without considering the ordering of those facts. This adaptation is a stringent accuracy measure, necessitating an exact correspondence between the candidate and ground truth facts. It is important to note that in the original work of Yu et al., 2019, the metric was applied to SQL clauses, whereas in our context, it has been tailored to assess factual strings.
 
 
 | Model | Set Match | SPICE | Model Weight |
