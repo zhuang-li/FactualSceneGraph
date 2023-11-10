@@ -106,21 +106,36 @@ print(tokenizer.decode(generated_ids[0], skip_special_tokens=True, clean_up_toke
 # Output: `( pigs, is, 2), (bags, on back of, pigs), (bags, is, 2), (pigs, fly on, sky )`
 ```
 
-Note here 'is' is referred to as 'has_attribute'.
+Note here the predicate 'is' is referred to as the predicate 'has_attribute'.
 
-### With node indexes and verb identifiers
+### Enhanced Scene Graph Parsing with Node Indexes and Verb Identifiers
 
-This type of scene graph parsing generates a detailed scene graph, complete with verb identifiers and node indexes, based on the input text provided. To illustrate, the sentence "a monkey is sitting next to another monkey" would be parsed into the scene graph "( monkey, v:sit next to, monkey:1 )". In this graph, the prefix "v:" specifies that "sit" functions as the verb, while the suffix ":1" denotes that the second "monkey" is distinct from the first.
+Enhanced scene graph parsing includes detailed annotations such as verb identifiers and node indexes, which offer a more nuanced understanding of the relationships within the input text. For example:
 
-Similarly, the sentence "a car is parked on the ground" would be translated into the scene graph "( car, pv:park, on, ground )". In this case, the prefix "pv:" indicates that "park" is a passive verb. We highlight passive verbs as the order of nodes in the scene graphs is very important.
+- The sentence "A monkey is sitting next to another monkey" is parsed as:
+  `( monkey, v:sit next to, monkey:1 )`
+  Here, "v:" indicates a verb, and ":1" differentiates the second "monkey" as a unique entity.
 
-These improvements in scene graph parsing offer several benefits over the original scene graphs used in the Visual Genome. For instance, in the original VG scene graph, nodes with identical names couldn't be differentiated. Our enhanced parsing approach solves this issue by adding indexes to uniquely identify nodes with the same name. Additionally, we annotate each predicate with the corresponding verb and its tense. These added features enrich the scene graph with more fine-grained information, enhancing its utility for downstream tasks.
+- For "A car is parked on the ground", the scene graph is:
+  `( car, pv:park, on, ground )`
+  The "pv:" prefix highlights "park" as a passive verb, underscoring the significance of node order in the graph.
 
-|  | Set Match | SPICE |Model Weight|
-| -------- | -------- | -------- |-------- |
-| (pretrain + fine-tune) Flan-T5-large    | 80.57   | 92.97   | [lizhuang144/flan-t5-large-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg-id) |
-| (pretrain + fine-tune) Flan-T5-base    | 80.70   | 92.89   | [lizhuang144/flan-t5-base-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg-id) |
-| (pretrain + fine-tune) Flan-T5-small    | 78.38   | 91.93   | [lizhuang144/flan-t5-small-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg-id) |
+This advanced parsing technique offers substantial enhancements over the original Visual Genome (VG) scene graphs by:
+
+- **Uniquely Identifying Similar Entities**: Assigning indexes to nodes with the same name allows for clear differentiation between identical entities.
+- **Detailing Predicates**: Annotating each predicate with the specific verb and its tense provides richer contextual information.
+
+Such improvements are invaluable for complex downstream tasks, as they facilitate a deeper semantic understanding of the scenes.
+
+#### Model Performance with Advanced Parsing:
+
+| Model | Set Match | SPICE | Model Weight |
+|-------|-----------|-------|--------------|
+| (pre) Flan-T5-large | 80.57 | 92.97 | [flan-t5-large-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg-id) |
+| (pre) Flan-T5-base | 80.70 | 92.89 | [flan-t5-base-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg-id) |
+| (pre) Flan-T5-small | 78.38 | 91.93 | [flan-t5-small-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg-id) |
+
+The acronym (pre) stands for models that were pre-trained on VG and then fine-tuned on FACTUAL, indicating a two-phase learning process that enhances model performance.
 
 ## FACTUAL-MR Scene Graph Parsing Model
 
