@@ -56,6 +56,12 @@ The FACTUAL Scene Graph dataset includes 40,369 instances with lemmatized predic
 
 The following table shows the performance comparison of various scene graph parsing models. Notably, the original SPICE parser exhibits lower performance relative to more recent models.
 
+#### Performance Metrics Explained:
+- **SPICE F-score**: A metric that measures the similarity between candidate and reference scene graph representations derived from captions. It assesses the quality of scene graph parsing by evaluating how well the parser's output matches the ground truth graph in terms of propositional content.
+- **Exact Set Match**: Customized from [Yu et al., 2019](https://aclanthology.org/P19-1443/), this metric determines the accuracy of the parsers by checking if the parsed strings of facts match the ground truth, ignoring the order of the facts. It is a strict measure of accuracy that requires the candidate facts to be exactly the same as the ground truth facts.
+
+
+
 | Model | Set Match | SPICE | Model Weight |
 |-------|-----------|-------|--------------|
 | SPICE Parser | 13.00 | 56.15 | [modified-SPICE-score](https://github.com/yychai74/modified-SPICE-score) |
