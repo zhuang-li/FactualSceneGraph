@@ -1,12 +1,13 @@
 # FACTUAL: A Benchmark for Faithful and Consistent Textual Scene Graph Parsing
 
-This repository contains the code and dataset for the paper [FACTUAL: A Benchmark for Faithful and Consistent Textual Scene Graph Parsing](https://arxiv.org/pdf/2305.17497.pdf) (ACL 2023).
+Welcome to the official repository for the ACL 2023 paper:  
+[**FACTUAL: A Benchmark for Faithful and Consistent Textual Scene Graph Parsing**](https://arxiv.org/pdf/2305.17497.pdf). Here, you'll find both the code and dataset associated with our research.
 
-<p align="center">
-  <img src="logo/monash_logo.png" height="80" />
-  <img src="logo/adobe_logo.png" height="80" />
-  <img src="logo/wuhan_logo.png" height="80" />
-</p>
+<div align="center">
+  <img src="logo/monash_logo.png" alt="Monash University Logo" height="80" />
+  <img src="logo/adobe_logo.png" alt="Adobe Logo" height="80" />
+  <img src="logo/wuhan_logo.png" alt="Wuhan University Logo" height="80" />
+</div>
 
 ## Dataset
 
