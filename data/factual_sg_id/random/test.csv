@@ -208,7 +208,7 @@ image_id,region_id,caption,scene_graph
 2377239,1648041,united states flag hanging,"( flag , is , hanging ) , ( flag , is , united states )"
 2360515,2643685,a row of computer chairs against a desk,"( chairs , against , desk ) , ( chairs , is , computer )"
 2416565,4863301,animal laying on concrete under large branch,"( animal , v:lay under , branch ) , ( animal , v:lay on , concrete ) , ( branch , is , large )"
-2388193,1322982,the center stripes on the road,"( stripes , v:in center of , road )"
+2388193,1322982,the center stripes on the road,"( stripes , in center of , road )"
 2398200,842191,horses behind a fence,"( horses , behind , fence )"
 2364496,2452818,cheesy pizza and red sauce on plate,"( sauce , is , red ) , ( pizza , on , plate ) , ( pizza , is , cheesy ) , ( sauce , on , plate )"
 2345904,3340874,chain and tall pole against bright sky,"( pole , is , tall ) , ( sky , is , bright ) , ( pole , against , sky ) , ( chain , against , sky )"
