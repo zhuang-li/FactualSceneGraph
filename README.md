@@ -79,8 +79,48 @@ The prefix "(pre)" indicates models that were pre-trained on the VG scene graph 
 > **Note**: In the training of these models, we have removed the node index, meaning that different nodes with identical names will not be distinguished by their indexes. Furthermore, passive identifiers, such as 'p:', are excluded, and verbs and prepositions have been merged. This format, while losing some information from the FACTUAL-MR dataset, remains compatible with the Visual Genome scene graphs and can be effectively used in downstream scene graph tasks.
 
 
+### Enhanced Scene Graph Parsing with Node Indexes and Verb Identifiers
 
-**Usage Example**:
+Enhanced scene graph parsing includes detailed annotations such as verb identifiers and node indexes, which offer a more nuanced understanding of the relationships within the input text. For example:
+
+- The sentence "A monkey is sitting next to another monkey" is parsed as:
+  `( monkey, v:sit next to, monkey:1 )`
+  Here, "v:" indicates a verb, and ":1" differentiates the second "monkey" as a unique entity.
+
+- For "A car is parked on the ground", the scene graph is:
+  `( car, pv:park on, ground )`
+  The "pv:" prefix highlights "park" as a passive verb, underscoring the significance of node order in the graph.
+
+This advanced parsing technique offers substantial enhancements over the original Visual Genome (VG) scene graphs by:
+
+- **Uniquely Identifying Similar Entities**: Assigning indexes to nodes with the same name allows for clear differentiation between identical entities.
+- **Detailing Predicates**: Annotating each predicate with the specific verb and its tense provides richer contextual information.
+
+Such improvements are invaluable for complex downstream tasks, as they facilitate a deeper semantic understanding of the scenes.
+
+#### Model Performance with Advanced Parsing:
+
+| Model | Set Match | SPICE | Model Weight |
+|-------|-----------|-------|--------------|
+| (pre) Flan-T5-large | 80.57 | 92.97 | [flan-t5-large-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg-id) |
+| (pre) Flan-T5-base | 80.90 | 92.99 | [flan-t5-base-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg-id) |
+| (pre) Flan-T5-small | 78.38 | 91.93 | [flan-t5-small-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg-id) |
+
+The acronym (pre) stands for models that were pre-trained on VG and then fine-tuned on FACTUAL, indicating a two-phase learning process that enhances model performance.
+
+### Usage Example
+
+This section demonstrates how to use our models for scene graph parsing. We provide two examples: a basic usage with our pre-trained model and a more advanced usage with the `SceneGraphParser` class.
+
+#### Basic Usage
+
+First, install the necessary package:
+
+```sh
+pip install factual
+```
+
+Then, you can use our pre-trained model as follows:
 
 ```python
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
@@ -106,41 +146,44 @@ generated_ids = model.generate(
 )
 
 print(tokenizer.decode(generated_ids[0], skip_special_tokens=True, clean_up_tokenization_spaces=True))
-# Output: `( pigs, is, 2), (bags, on back of, pigs), (bags, is, 2), (pigs, fly on, sky )`
+# Output: `( pigs , is , 2 ) , ( bags , on back of , pigs ), ( bags , is , 2 ) , ( pigs , fly on , sky )`
 ```
+Note: In this example, the predicate 'is' is referred to as 'has_attribute'.
 
-Note here the predicate 'is' is referred to as the predicate 'has_attribute'.
+Advanced Usage with ``SceneGraphParser``
+For a more advanced parsing, utilize the ``SceneGraphParser`` class:
 
-### Enhanced Scene Graph Parsing with Node Indexes and Verb Identifiers
+```python
+from sng_parser.scene_graph_parser import SceneGraphParser
 
-Enhanced scene graph parsing includes detailed annotations such as verb identifiers and node indexes, which offer a more nuanced understanding of the relationships within the input text. For example:
+parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', device='cpu')
+text_graph = parser.parse(["2 beautiful pigs are flying on the sky with 2 bags on their backs"], beam_size=1, return_text=True)
+graph_obj = parser.parse(["2 beautiful and strong pigs are flying on the sky with 2 bags on their backs"], beam_size=1, return_text=False,max_output_len=128)
 
-- The sentence "A monkey is sitting next to another monkey" is parsed as:
-  `( monkey, v:sit next to, monkey:1 )`
-  Here, "v:" indicates a verb, and ":1" differentiates the second "monkey" as a unique entity.
+print(text_graph[0])
+# Output: ( pigs , is , 2 ) , ( pigs , is , beautiful ) , ( bags , on back of , pigs ) , ( pigs , fly on , sky ) , ( bags , is , 2 )
 
-- For "A car is parked on the ground", the scene graph is:
-  `( car, pv:park on, ground )`
-  The "pv:" prefix highlights "park" as a passive verb, underscoring the significance of node order in the graph.
-
-This advanced parsing technique offers substantial enhancements over the original Visual Genome (VG) scene graphs by:
-
-- **Uniquely Identifying Similar Entities**: Assigning indexes to nodes with the same name allows for clear differentiation between identical entities.
-- **Detailing Predicates**: Annotating each predicate with the specific verb and its tense provides richer contextual information.
-
-Such improvements are invaluable for complex downstream tasks, as they facilitate a deeper semantic understanding of the scenes.
-
-#### Model Performance with Advanced Parsing:
-
-| Model | Set Match | SPICE | Model Weight |
-|-------|-----------|-------|--------------|
-| (pre) Flan-T5-large | 80.57 | 92.97 | [flan-t5-large-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg-id) |
-| (pre) Flan-T5-base | 80.70 | 92.89 | [flan-t5-base-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg-id) |
-| (pre) Flan-T5-small | 78.38 | 91.93 | [flan-t5-small-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg-id) |
-
-The acronym (pre) stands for models that were pre-trained on VG and then fine-tuned on FACTUAL, indicating a two-phase learning process that enhances model performance.
-
-## FACTUAL-MR Scene Graph Parsing Model
+from sng_parser.utils import tprint
+tprint(graph_obj[0])
+```
+This will produce a formatted scene graph output:
+```
+Entities:
++----------+------------+------------------+
+| Entity   | Quantity   | Attributes       |
+|----------+------------+------------------|
+| pigs     | 2          | strong,beautiful |
+| sky      |            |                  |
+| bags     |            |                  |
++----------+------------+------------------+
+Relations:
++-----------+------------+----------+
+| Subject   | Relation   | Object   |
+|-----------+------------+----------|
+| pigs      | fly on     | sky      |
+| bags      | on back of | pigs     |
++-----------+------------+----------+
+```
 
 ## Soft-SPICE
 
