@@ -79,38 +79,6 @@ The prefix "(pre)" indicates models that were pre-trained on the VG scene graph 
 > **Note**: In the training of these models, we have removed the node index, meaning that different nodes with identical names will not be distinguished by their indexes. Furthermore, passive identifiers, such as 'p:', are excluded, and verbs and prepositions have been merged. This format, while losing some information from the FACTUAL-MR dataset, remains compatible with the Visual Genome scene graphs and can be effectively used in downstream scene graph tasks.
 
 
-
-**Usage Example**:
-
-```python
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-
-tokenizer = AutoTokenizer.from_pretrained("lizhuang144/flan-t5-base-VG-factual-sg")
-model = AutoModelForSeq2SeqLM.from_pretrained("lizhuang144/flan-t5-base-VG-factual-sg")
-
-text = tokenizer(
-    "Generate Scene Graph: 2 pigs are flying on the sky with 2 bags on their backs",
-    max_length=200,
-    return_tensors="pt",
-    truncation=True
-)
-
-generated_ids = model.generate(
-    text["input_ids"],
-    attention_mask=text["attention_mask"],
-    use_cache=True,
-    decoder_start_token_id=tokenizer.pad_token_id,
-    num_beams=1,
-    max_length=200,
-    early_stopping=True
-)
-
-print(tokenizer.decode(generated_ids[0], skip_special_tokens=True, clean_up_tokenization_spaces=True))
-# Output: `( pigs, is, 2), (bags, on back of, pigs), (bags, is, 2), (pigs, fly on, sky )`
-```
-
-Note here the predicate 'is' is referred to as the predicate 'has_attribute'.
-
 ### Enhanced Scene Graph Parsing with Node Indexes and Verb Identifiers
 
 Enhanced scene graph parsing includes detailed annotations such as verb identifiers and node indexes, which offer a more nuanced understanding of the relationships within the input text. For example:
@@ -140,7 +108,82 @@ Such improvements are invaluable for complex downstream tasks, as they facilitat
 
 The acronym (pre) stands for models that were pre-trained on VG and then fine-tuned on FACTUAL, indicating a two-phase learning process that enhances model performance.
 
-## FACTUAL-MR Scene Graph Parsing Model
+### Usage Example
+
+This section demonstrates how to use our models for scene graph parsing. We provide two examples: a basic usage with our pre-trained model and a more advanced usage with the `SceneGraphParser` class.
+
+#### Basic Usage
+
+First, install the necessary package:
+
+```sh
+pip install factual
+```
+
+Then, you can use our pre-trained model as follows:
+
+```python
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+
+tokenizer = AutoTokenizer.from_pretrained("lizhuang144/flan-t5-base-VG-factual-sg")
+model = AutoModelForSeq2SeqLM.from_pretrained("lizhuang144/flan-t5-base-VG-factual-sg")
+
+text = tokenizer(
+    "Generate Scene Graph: 2 pigs are flying on the sky with 2 bags on their backs",
+    max_length=200,
+    return_tensors="pt",
+    truncation=True
+)
+
+generated_ids = model.generate(
+    text["input_ids"],
+    attention_mask=text["attention_mask"],
+    use_cache=True,
+    decoder_start_token_id=tokenizer.pad_token_id,
+    num_beams=1,
+    max_length=200,
+    early_stopping=True
+)
+
+print(tokenizer.decode(generated_ids[0], skip_special_tokens=True, clean_up_tokenization_spaces=True))
+# Output: `( pigs , is , 2 ) , ( bags , on back of , pigs ), ( bags , is , 2 ) , ( pigs , fly on , sky )`
+```
+Note: In this example, the predicate 'is' is referred to as 'has_attribute'.
+
+Advanced Usage with ``SceneGraphParser``
+For a more advanced parsing, utilize the ``SceneGraphParser`` class:
+
+```python
+from sng_parser.scene_graph_parser import SceneGraphParser
+
+parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', device='cpu')
+text_graph = parser.parse(["2 beautiful pigs are flying on the sky with 2 bags on their backs"], beam_size=1, return_text=True)
+graph_obj = parser.parse(["2 beautiful and strong pigs are flying on the sky with 2 bags on their backs"], beam_size=1, return_text=False,max_output_len=128)
+
+print(text_graph[0])
+# Output: ( pigs , is , 2 ) , ( pigs , is , beautiful ) , ( bags , on back of , pigs ) , ( pigs , fly on , sky ) , ( bags , is , 2 )
+
+from sng_parser.utils import tprint
+tprint(graph_obj[0])
+```
+This will produce a formatted scene graph output:
+```
+Entities:
++----------+------------+------------------+
+| Entity   | Quantity   | Attributes       |
+|----------+------------+------------------|
+| pigs     | 2          | strong,beautiful |
+| sky      |            |                  |
+| bags     |            |                  |
++----------+------------+------------------+
+Relations:
++-----------+------------+----------+
+| Subject   | Relation   | Object   |
+|-----------+------------+----------|
+| pigs      | fly on     | sky      |
+| bags      | on back of | pigs     |
++-----------+------------+----------+
+```
 
 ## Soft-SPICE
 
