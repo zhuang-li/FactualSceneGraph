@@ -4,9 +4,9 @@ Welcome to the official repository for the ACL 2023 paper:
 [**FACTUAL: A Benchmark for Faithful and Consistent Textual Scene Graph Parsing**](https://arxiv.org/pdf/2305.17497.pdf). Here, you'll find both the code and dataset associated with our research.
 
 <div align="center">
-  <img src="logo/monash_logo.png" alt="Monash University Logo" height="80" />
-  <img src="logo/adobe_logo.png" alt="Adobe Logo" height="80" />
-  <img src="logo/wuhan_logo.png" alt="Wuhan University Logo" height="80" />
+  <img src="https://github.com/zhuang-li/FACTUAL/blob/main/logo/monash_logo.png" alt="Monash University Logo" height="80" />
+  <img src="https://github.com/zhuang-li/FACTUAL/blob/main/logo/adobe_logo.png" alt="Adobe Logo" height="80" />
+  <img src="https://github.com/zhuang-li/FACTUAL/blob/main/logo/wuhan_logo.png" alt="Wuhan University Logo" height="80" />
 </div>
 
 ## Dataset
@@ -117,7 +117,7 @@ This section demonstrates how to use our models for scene graph parsing. We prov
 First, install the necessary package:
 
 ```sh
-pip install factual
+pip install FactualSceneGraph
 ```
 
 Then, you can use our pre-trained model as follows:

@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='FactualSceneGraph',
-    version='0.1.0',
+    version='0.2.3',
     author='Zhuang Li',
     author_email='lizhuang144@example.com',
     description='A package for scene graph parsing and evaluation',
@@ -10,7 +10,7 @@ setup(
     long_description_content_type='text/markdown',
     url='https://github.com/zhuang-li/FACTUAL',
     package_dir={"": "src"},
-    packages=find_packages(where='src',exclude=["data", "examples", "interface"]),
+    packages=find_packages(where='src',exclude=["examples", "interface"]),
     include_package_data=True,
     install_requires=[
         'torch',
