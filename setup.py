@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='factual',
+    name='FactualSceneGraph',
     version='0.1.0',
     author='Zhuang Li',
     author_email='lizhuang144@example.com',
