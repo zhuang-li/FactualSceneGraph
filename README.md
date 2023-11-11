@@ -213,4 +213,11 @@ To cite this work, please use the following Bibtex entry:
 }
 ```
 
+## Acknowledgments
+
+This project has been developed with the use of code from the [SceneGraphParser](https://github.com/vacancy/SceneGraphParser) repository by [Jiayuan Mao](https://github.com/vacancy). We gratefully acknowledge their pioneering work and contributions to the open-source community.
+
+The SceneGraphParser has significantly influenced the development of this project, and we would like to extend our sincere thanks to Jiayuan Mao and all the contributors for their valuable work.
+
+
 
