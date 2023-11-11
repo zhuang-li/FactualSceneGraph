@@ -51,7 +51,7 @@ The FACTUAL Scene Graph dataset includes 40,369 instances with lemmatized predic
 - **From Huggingface**: `load_dataset('lizhuang144/FACTUAL_Scene_Graph_ID')`
 - **Enhancements**: Contains verb identifiers, passive voice indicators, and node indexes.
 
-## Scene Graph Parsing Models Performance
+## Scene Graph Parsing Models
 
 ### Simplified Model Training Without Node Indexes and Passive Identifiers
 
