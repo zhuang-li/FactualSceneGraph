@@ -99,9 +99,9 @@ Such improvements are invaluable for complex downstream tasks, as they facilitat
 
 | Model | Set Match | SPICE | Model Weight |
 |-------|-----------|-------|--------------|
-| (pre) Flan-T5-large | 80.57 | 92.97 | [flan-t5-large-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg-id) |
-| (pre) Flan-T5-base | 80.90 | 92.99 | [flan-t5-base-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg-id) |
-| (pre) Flan-T5-small | 78.38 | 91.93 | [flan-t5-small-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg-id) |
+| (pre) Flan-T5-large | 81.03 | 93.01 | [flan-t5-large-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg-id) |
+| (pre) Flan-T5-base | 81.37 | 93.29 | [flan-t5-base-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg-id) |
+| (pre) Flan-T5-small | 79.64 | 92.41 | [flan-t5-small-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg-id) |
 
 The acronym (pre) stands for models that were pre-trained on VG and then fine-tuned on FACTUAL, indicating a two-phase learning process that enhances model performance.
 
