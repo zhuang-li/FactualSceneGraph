@@ -68,7 +68,7 @@ The following table shows the performance comparison of various scene graph pars
 |-------|-----------|-------|--------------|
 | SPICE Parser | 13.00 | 56.15 | [modified-SPICE-score](https://github.com/yychai74/modified-SPICE-score) |
 | (pre) Flan-T5-large | 81.30 | 93.17 | [flan-t5-large-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg) |
-| (pre) Flan-T5-base | 81.50 | 93.33 | [flan-t5-base-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg) |
+| (pre) Flan-T5-base | 80.77 | 92.97 | [flan-t5-base-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg) |
 | (pre) Flan-T5-small | 79.77 | 92.76 | [flan-t5-small-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg) |
 
 The prefix "(pre)" indicates models that were pre-trained on the VG scene graph dataset before being fine-tuned on the FACTUAL dataset. The outdated SPICE parser, despite its historical significance, shows a Set Match rate of only 13% and a SPICE score of 56.15, which is significantly lower than the more recent Flan-T5 models fine-tuned on FACTUAL data.
@@ -151,7 +151,7 @@ Advanced Usage with ``SceneGraphParser``
 For a more advanced parsing, utilize the ``SceneGraphParser`` class:
 
 ```python
-from sng_parser.scene_graph_parser import SceneGraphParser
+from factual_scene_graph.parser.scene_graph_parser import SceneGraphParser
 
 parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', device='cpu')
 text_graph = parser.parse(["2 beautiful pigs are flying on the sky with 2 bags on their backs"], beam_size=1, return_text=True)
@@ -169,9 +169,9 @@ Entities:
 +----------+------------+------------------+
 | Entity   | Quantity   | Attributes       |
 |----------+------------+------------------|
-| pigs     | 2          | strong,beautiful |
+| pigs     | 2          | beautiful,strong |
+| bags     | 2          |                  |
 | sky      |            |                  |
-| bags     |            |                  |
 +----------+------------+------------------+
 Relations:
 +-----------+------------+----------+
@@ -182,7 +182,95 @@ Relations:
 +-----------+------------+----------+
 ```
 
-## Soft-SPICE
+## Factual Scene Graph Evaluation
+
+This package provides implementations for evaluating scene graphs using SPICE, SoftSPICE, and Set Match metrics. These evaluations can be performed on various inputs, including captions and scene graphs in both list and nested list formats.
+
+### Supported Input Formats
+
+- `(list of candidate_captions, list of list reference_captions)`
+- `(list of candidate_captions, list of list reference_graphs)`
+- `(list of candidate_graphs, list of list reference_graphs)`
+
+## Installation
+
+[Instructions for installation]
+
+## Usage
+
+Below are examples demonstrating how to use the evaluation methods provided in this package.
+
+#### Example 1: Testing Scene Graph Parsing
+
+This example demonstrates evaluating a single scene graph using the SPICE method.
+
+```python
+import pandas as pd
+import torch
+from factual_scene_graph.evaluation.evaluator import Evaluator
+from factual_scene_graph.parser.scene_graph_parser import SceneGraphParser
+
+def test_scene_graph_parsing():
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', device=device)
+    evaluator = Evaluator(parser=parser, device='cuda:0')
+
+    scores = evaluator.evaluate(
+        ["2 beautiful pigs are flying on the sky with 2 bags on their backs"],
+        [['( pigs , is , beautiful ) , ( bags , on back of , pigs ) , ( bags , is , 2 ) , ( pigs , is , 2 ) , ( pigs , fly on , sky )']],
+        method='spice',
+        beam_size=1,
+        max_output_len=128
+    )
+    print(scores)
+
+# Uncomment to run the example
+# test_scene_graph_parsing()
+```
+
+#### Example 2: Testing Scene Graph Parsing on the Test Set of FACTUAL Random Split
+
+This example demonstrates evaluating a dataset of scene graphs using SPICE, Set Match, and SoftSPICE methods.
+
+```python
+import pandas as pd
+import torch
+from factual_scene_graph.evaluation.evaluator import Evaluator
+from factual_scene_graph.parser.scene_graph_parser import SceneGraphParser
+
+def test_scene_graph_parsing_on_random():
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', device=device, lemmatize=False)
+    evaluator = Evaluator(parser=parser, text_encoder_checkpoint='all-MiniLM-L6-v2', device='cuda:0', lemmatize=True)
+
+    random_data_pd = pd.read_csv('data/factual_sg/random/test.csv')
+    random_data_captions = random_data_pd['caption'].tolist()
+    random_data_graphs = [[scene] for scene in random_data_pd['scene_graph'].tolist()]
+
+    # Evaluating using SPICE
+    spice_scores, cand_graphs, ref_graphs = evaluator.evaluate(
+        random_data_captions, 
+        random_data_graphs, 
+        method='spice', 
+        beam_size=1, 
+        batch_size=128, 
+        max_input_len=256, 
+        max_output_len=256, 
+        return_graphs=True
+    )
+    print('SPICE scores for random test set:', sum(spice_scores)/len(spice_scores))
+
+    # Evaluating using Set Match
+    set_match_scores = evaluator.evaluate(cand_graphs, ref_graphs, method='set_match', beam_size=1)
+    print('Set Match scores for random test set:', sum(set_match_scores)/len(set_match_scores))
+
+    # Evaluating using Soft-SPICE
+    soft_spice_scores = evaluator.evaluate(cand_graphs, ref_graphs, method='soft_spice', beam_size=1)
+    print('Soft-SPICE scores for random test set:', sum(soft_spice_scores)/len(soft_spice_scores))
+
+# Uncomment to run the example
+# test_scene_graph_parsing_on_random()
+```
 
 ## Citation
 
