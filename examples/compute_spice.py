@@ -6,8 +6,12 @@ import numpy as np
 import scipy
 import torch
 
+
+
 sys.path.append('../')
-from soft_spice.soft_spice import SoftSpiceScorer
+
+from factual_scene_graph.evaluation.soft_spice import SoftSpiceScorer
+
 
 def compute_spice_correlation(input_json, tauvariant='c'):
     data = {}
@@ -34,14 +38,14 @@ def compute_spice_correlation(input_json, tauvariant='c'):
     assert len(candidates) == len(refs)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    soft_spice_scorer = SoftSpiceScorer(device=device, text_encoder_checkpoint='all-mpnet-base-v2', lemma=False,lowercase=True,max_output_length=256)
+    soft_spice_scorer = SoftSpiceScorer(device=device, text_encoder_checkpoint='all-MiniLM-L6-v2', lemma=False,lowercase=True,max_output_length=256)
 
-    score_list = soft_spice_scorer.soft_spice_score(candidates, refs, batch_size=128)
+    score_list = soft_spice_scorer.soft_spice_score(candidates, refs, batch_size=64)
     assert len(score_list) == len(human_scores)
     print('Soft-SPICE score: ', sum(score_list) / len(score_list))
     print('{} Tau-{}: {:.3f}'.format(tauvariant, tauvariant, 100*scipy.stats.kendalltau(score_list, human_scores, variant=tauvariant)[0]))
 
-    score_list = soft_spice_scorer.spice_score(candidates, refs, batch_size=128)
+    score_list = soft_spice_scorer.spice_score(candidates, refs, batch_size=64)
     assert len(score_list) == len(human_scores)
     print('SPICE score: ', sum(score_list) / len(score_list))
     print('{} Tau-{}: {:.3f}'.format(tauvariant, tauvariant, 100*scipy.stats.kendalltau(score_list, human_scores, variant=tauvariant)[0]))

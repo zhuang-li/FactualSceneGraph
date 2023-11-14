@@ -15,6 +15,12 @@ setup(
     install_requires=[
         'torch',
         'transformers',
+        'tqdm',
+        'nltk',
+        'spacy',
+        'sentence-transformers',
+        'pandas',
+        'numpy'
         # Add other dependencies needed for your package
     ],
     classifiers=[
