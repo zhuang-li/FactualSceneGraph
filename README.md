@@ -155,7 +155,7 @@ from factual_scene_graph.parser.scene_graph_parser import SceneGraphParser
 
 parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', device='cpu')
 text_graph = parser.parse(["2 beautiful pigs are flying on the sky with 2 bags on their backs"], beam_size=1, return_text=True)
-graph_obj = parser.parse(["2 beautiful and strong pigs are flying on the sky with 2 bags on their backs"], beam_size=1, return_text=False,max_output_len=128)
+graph_obj = parser.parse(["2 beautiful and strong pigs are flying on the sky with 2 bags on their backs"], beam_size=5, return_text=False,max_output_len=128)
 
 print(text_graph[0])
 # Output: ( pigs , is , 2 ) , ( pigs , is , beautiful ) , ( bags , on back of , pigs ) , ( pigs , fly on , sky ) , ( bags , is , 2 )
