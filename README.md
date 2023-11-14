@@ -51,7 +51,7 @@ The FACTUAL Scene Graph dataset includes 40,369 instances with lemmatized predic
 - **From Huggingface**: `load_dataset('lizhuang144/FACTUAL_Scene_Graph_ID')`
 - **Enhancements**: Contains verb identifiers, passive voice indicators, and node indexes.
 
-## Scene Graph Parsing Models Performance
+## Scene Graph Parsing Models
 
 ### Simplified Model Training Without Node Indexes and Passive Identifiers
 
@@ -64,15 +64,12 @@ The following table shows the performance comparison of various scene graph pars
 > **Note**: It is important to note that in the original work of Yu et al., 2019, the metric was applied to SQL clauses, whereas in our context, it has been tailored to assess scene graph facts.
 
 
-| Model | Set Match | SPICE | Model Weight |
-|-------|-----------|-------|--------------|
-| SPICE Parser | 13.00 | 56.15 | [modified-SPICE-score](https://github.com/yychai74/modified-SPICE-score) |
-| Flan-T5-large | 80.17 | 92.64 | [flan-t5-large-factual-sg](https://huggingface.co/lizhuang144/flan-t5-large-factual-sg) |
-| Flan-T5-base | 80.70 | 92.72 | [flan-t5-base-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-factual-sg) |
-| Flan-T5-small | 77.72 | 91.67 | [flan-t5-small-factual-sg](https://huggingface.co/lizhuang144/flan-t5-small-factual-sg) |
-| (pre) Flan-T5-large | 81.30 | 93.17 | [flan-t5-large-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg) |
-| (pre) Flan-T5-base | 81.50 | 93.33 | [flan-t5-base-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg) |
-| (pre) Flan-T5-small | 79.77 | 92.76 | [flan-t5-small-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg) |
+| Model | Set Match | SPICE | Soft-SPICE| Model Weight |
+|-------|-----------|-------|--------------|--------------|
+| SPICE Parser | 13.00 | 56.15 |  | [modified-SPICE-score](https://github.com/yychai74/modified-SPICE-score) |
+| (pre) Flan-T5-large | 81.63 | 93.20 | 98.75 | [flan-t5-large-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg) |
+| (pre) Flan-T5-base | 80.77 | 92.97 | 98.87| [flan-t5-base-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg) |
+| (pre) Flan-T5-small | 78.18 | 92.26 | 98.67| [flan-t5-small-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg) |
 
 The prefix "(pre)" indicates models that were pre-trained on the VG scene graph dataset before being fine-tuned on the FACTUAL dataset. The outdated SPICE parser, despite its historical significance, shows a Set Match rate of only 13% and a SPICE score of 56.15, which is significantly lower than the more recent Flan-T5 models fine-tuned on FACTUAL data.
 
@@ -100,11 +97,11 @@ Such improvements are invaluable for complex downstream tasks, as they facilitat
 
 #### Model Performance with Advanced Parsing:
 
-| Model | Set Match | SPICE | Model Weight |
-|-------|-----------|-------|--------------|
-| (pre) Flan-T5-large | 80.57 | 92.97 | [flan-t5-large-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg-id) |
-| (pre) Flan-T5-base | 80.90 | 92.99 | [flan-t5-base-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg-id) |
-| (pre) Flan-T5-small | 78.38 | 91.93 | [flan-t5-small-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg-id) |
+| Model | Set Match | SPICE | Soft-SPICE |Model Weight |
+|-------|-----------|-------|--------------|--------------|
+| (pre) Flan-T5-large | 81.03 | 93.00 | 98.66 |[flan-t5-large-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg-id) |
+| (pre) Flan-T5-base | 81.37 | 93.29 | 98.76 |[flan-t5-base-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg-id) |
+| (pre) Flan-T5-small | 79.64 | 92.40 | 98.53 |[flan-t5-small-VG-factual-sg-id](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg-id) |
 
 The acronym (pre) stands for models that were pre-trained on VG and then fine-tuned on FACTUAL, indicating a two-phase learning process that enhances model performance.
 
@@ -154,7 +151,7 @@ Advanced Usage with ``SceneGraphParser``
 For a more advanced parsing, utilize the ``SceneGraphParser`` class:
 
 ```python
-from sng_parser.scene_graph_parser import SceneGraphParser
+from factual_scene_graph.parser.scene_graph_parser import SceneGraphParser
 
 parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', device='cpu')
 text_graph = parser.parse(["2 beautiful pigs are flying on the sky with 2 bags on their backs"], beam_size=1, return_text=True)
@@ -172,9 +169,9 @@ Entities:
 +----------+------------+------------------+
 | Entity   | Quantity   | Attributes       |
 |----------+------------+------------------|
-| pigs     | 2          | strong,beautiful |
+| pigs     | 2          | beautiful,strong |
+| bags     | 2          |                  |
 | sky      |            |                  |
-| bags     |            |                  |
 +----------+------------+------------------+
 Relations:
 +-----------+------------+----------+
@@ -185,7 +182,125 @@ Relations:
 +-----------+------------+----------+
 ```
 
-## Soft-SPICE
+## Factual Scene Graph Evaluation
+
+This package provides implementations for evaluating scene graphs using SPICE, SoftSPICE, and Set Match metrics. These evaluations can be performed on various inputs, including captions and scene graphs in both list and nested list formats.
+
+### Supported Input Formats
+
+- `(list of candidate_captions, list of list reference_captions)`
+- `(list of candidate_captions, list of list reference_graphs)`
+- `(list of candidate_graphs, list of list reference_graphs)`
+
+### Installation
+
+```sh
+pip install FactualSceneGraph
+```
+
+### Usage
+
+Below are examples demonstrating how to use the evaluation methods provided in this package.
+
+#### Example 1: Testing Scene Graph Parsing
+
+This example demonstrates evaluating a single scene graph using the SPICE method.
+
+```python
+import pandas as pd
+import torch
+from factual_scene_graph.evaluation.evaluator import Evaluator
+from factual_scene_graph.parser.scene_graph_parser import SceneGraphParser
+
+def test_scene_graph_parsing():
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', device=device)
+    evaluator = Evaluator(parser=parser, device='cuda:0')
+
+    scores = evaluator.evaluate(
+        ["2 beautiful pigs are flying on the sky with 2 bags on their backs"],
+        [['( pigs , is , beautiful ) , ( bags , on back of , pigs ) , ( bags , is , 2 ) , ( pigs , is , 2 ) , ( pigs , fly on , sky )']],
+        method='spice',
+        beam_size=1,
+        max_output_len=128
+    )
+    print(scores)
+
+# Uncomment to run the example
+# test_scene_graph_parsing()
+```
+
+#### Example 2: Testing Scene Graph Parsing on the Test Set of FACTUAL Random Split
+
+This example demonstrates evaluating a dataset of scene graphs using SPICE, Set Match, and SoftSPICE methods.
+
+```python
+import pandas as pd
+import torch
+from factual_scene_graph.evaluation.evaluator import Evaluator
+from factual_scene_graph.parser.scene_graph_parser import SceneGraphParser
+
+def test_scene_graph_parsing_on_random():
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', device=device, lemmatize=False)
+    evaluator = Evaluator(parser=parser, text_encoder_checkpoint='all-MiniLM-L6-v2', device='cuda:0', lemmatize=True)
+
+    random_data_pd = pd.read_csv('data/factual_sg/random/test.csv')
+    random_data_captions = random_data_pd['caption'].tolist()
+    random_data_graphs = [[scene] for scene in random_data_pd['scene_graph'].tolist()]
+
+    # Evaluating using SPICE
+    spice_scores, cand_graphs, ref_graphs = evaluator.evaluate(
+        random_data_captions, 
+        random_data_graphs, 
+        method='spice', 
+        beam_size=1, 
+        batch_size=128, 
+        max_input_len=256, 
+        max_output_len=256, 
+        return_graphs=True
+    )
+    print('SPICE scores for random test set:', sum(spice_scores)/len(spice_scores))
+
+    # Evaluating using Set Match
+    set_match_scores = evaluator.evaluate(cand_graphs, ref_graphs, method='set_match', beam_size=1)
+    print('Set Match scores for random test set:', sum(set_match_scores)/len(set_match_scores))
+
+    # Evaluating using Soft-SPICE
+    soft_spice_scores = evaluator.evaluate(cand_graphs, ref_graphs, method='soft_spice', beam_size=1)
+    print('Soft-SPICE scores for random test set:', sum(soft_spice_scores)/len(soft_spice_scores))
+
+# Uncomment to run the example
+# test_scene_graph_parsing_on_random()
+```
+
+### Human Correlation Performance on the Flickr8k Dataset
+
+In our study, we evaluated the correlation of various metrics with human judgment on the Flickr8k dataset. This comparison helps in understanding how well each metric aligns with human perception.
+
+#### Results
+
+Below is a table showing the Tau-c correlation values for different models:
+
+| Model            | Tau-c |
+|------------------|-------|
+| SPICE(Official) | 45.02 |
+| SPICE(Ours)        | 42.51 |
+| Soft-SPICE       | 54.00 |
+| RefCLIPScore     | 53.00 |
+| BERTScore        | 36.71 |
+
+#### Notes on Implementations
+
+- The default parser checkpoint we use is `lizhuang144/flan-t5-base-VG-factual-sg`.
+- The official SPICE implementation can be found at [Modified SPICE Score](https://github.com/yychai74/modified-SPICE-score). Our implementation of SPICE, while slightly underperforming in comparison due to a less complex synonym-matching mechanism, offers ease of use.
+- In our paper, we employ SPICE(Ours) for measuring parser performance in Table 3, as it does not influence the ranking of models. However, for direct comparison with previous studies in Tables 5 and 6, we use the official implementation of SPICE.
+
+#### Replicating the Results
+
+To replicate the human correlation results for Our SPICE and Soft-SPICE, please refer to the script located at `tests/test_metric_human_correlation.py`. This script provides a straightforward way to validate our findings.
+
+
 
 ## Citation
 
@@ -216,8 +331,6 @@ To cite this work, please use the following Bibtex entry:
 ## Acknowledgments
 
 This project has been developed with the use of code from the [SceneGraphParser](https://github.com/vacancy/SceneGraphParser) repository by [Jiayuan Mao](https://github.com/vacancy). We gratefully acknowledge their pioneering work and contributions to the open-source community.
-
-The SceneGraphParser has significantly influenced the development of this project, and we would like to extend our sincere thanks to Jiayuan Mao and all the contributors for their valuable work.
 
 
 
