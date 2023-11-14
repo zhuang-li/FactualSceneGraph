@@ -64,12 +64,12 @@ The following table shows the performance comparison of various scene graph pars
 > **Note**: It is important to note that in the original work of Yu et al., 2019, the metric was applied to SQL clauses, whereas in our context, it has been tailored to assess scene graph facts.
 
 
-| Model | Set Match | SPICE | Model Weight |
-|-------|-----------|-------|--------------|
-| SPICE Parser | 13.00 | 56.15 | [modified-SPICE-score](https://github.com/yychai74/modified-SPICE-score) |
-| (pre) Flan-T5-large | 81.30 | 93.17 | [flan-t5-large-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg) |
-| (pre) Flan-T5-base | 80.77 | 92.97 | [flan-t5-base-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg) |
-| (pre) Flan-T5-small | 79.77 | 92.76 | [flan-t5-small-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg) |
+| Model | Set Match | SPICE | Soft-SPICE| Model Weight |
+|-------|-----------|-------|--------------|--------------|
+| SPICE Parser | 13.00 | 56.15 | 98.75 | [modified-SPICE-score](https://github.com/yychai74/modified-SPICE-score) |
+| (pre) Flan-T5-large | 81.63 | 93.20 | | [flan-t5-large-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg) |
+| (pre) Flan-T5-base | 80.77 | 92.97 | 98.87| [flan-t5-base-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg) |
+| (pre) Flan-T5-small | 78.18 | 92.26 | 98.67| [flan-t5-small-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg) |
 
 The prefix "(pre)" indicates models that were pre-trained on the VG scene graph dataset before being fine-tuned on the FACTUAL dataset. The outdated SPICE parser, despite its historical significance, shows a Set Match rate of only 13% and a SPICE score of 56.15, which is significantly lower than the more recent Flan-T5 models fine-tuned on FACTUAL data.
 
@@ -192,11 +192,13 @@ This package provides implementations for evaluating scene graphs using SPICE, S
 - `(list of candidate_captions, list of list reference_graphs)`
 - `(list of candidate_graphs, list of list reference_graphs)`
 
-## Installation
+### Installation
 
-[Instructions for installation]
+```sh
+pip install FactualSceneGraph
+```
 
-## Usage
+### Usage
 
 Below are examples demonstrating how to use the evaluation methods provided in this package.
 
@@ -271,6 +273,34 @@ def test_scene_graph_parsing_on_random():
 # Uncomment to run the example
 # test_scene_graph_parsing_on_random()
 ```
+
+### Human Correlation Performance on the Flickr8k Dataset
+
+In our study, we evaluated the correlation of various metrics with human judgment on the Flickr8k dataset. This comparison helps in understanding how well each metric aligns with human perception.
+
+#### Results
+
+Below is a table showing the Tau-c correlation values for different models:
+
+| Model            | Tau-c |
+|------------------|-------|
+| SPICE(Official) | 45.02 |
+| SPICE(Ours)        | 42.51 |
+| Soft-SPICE       | 54.00 |
+| RefCLIPScore     | 53.00 |
+| BERTScore        | 36.71 |
+
+#### Notes on Implementations
+
+- The default parser checkpoint we use is `lizhuang144/flan-t5-base-VG-factual-sg`.
+- The official SPICE implementation can be found at [Modified SPICE Score](https://github.com/yychai74/modified-SPICE-score). Our implementation of SPICE, while slightly underperforming in comparison due to a less complex synonym-matching mechanism, offers ease of use.
+- In our paper, we employ SPICE(Ours) for measuring parser performance in Table 3, as it does not influence the ranking of models. However, for direct comparison with previous studies in Tables 5 and 6, we use the official implementation of SPICE.
+
+#### Replicating the Results
+
+To replicate the human correlation results for Our SPICE and Soft-SPICE, please refer to the script located at `tests/test_metric_human_correlation.py`. This script provides a straightforward way to validate our findings.
+
+
 
 ## Citation
 
