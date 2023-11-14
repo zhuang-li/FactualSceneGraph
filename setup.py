@@ -2,9 +2,9 @@ from setuptools import setup, find_packages
 
 setup(
     name='FactualSceneGraph',
-    version='0.2.3',
+    version='0.3.2',
     author='Zhuang Li',
-    author_email='lizhuang144@example.com',
+    author_email='lizhuang144@gmail.com',
     description='A package for scene graph parsing and evaluation',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
@@ -20,7 +20,8 @@ setup(
         'spacy',
         'sentence-transformers',
         'pandas',
-        'numpy'
+        'numpy',
+        'tabulate'
         # Add other dependencies needed for your package
     ],
     classifiers=[
