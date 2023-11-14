@@ -215,7 +215,7 @@ from factual_scene_graph.parser.scene_graph_parser import SceneGraphParser
 def test_scene_graph_parsing():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', device=device)
-    evaluator = Evaluator(parser=parser, device='cuda:0')
+    evaluator = Evaluator(parser=parser, device=device)
 
     scores = evaluator.evaluate(
         ["2 beautiful pigs are flying on the sky with 2 bags on their backs"],
@@ -243,7 +243,7 @@ from factual_scene_graph.parser.scene_graph_parser import SceneGraphParser
 def test_scene_graph_parsing_on_random():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', device=device, lemmatize=False)
-    evaluator = Evaluator(parser=parser, text_encoder_checkpoint='all-MiniLM-L6-v2', device='cuda:0', lemmatize=True)
+    evaluator = Evaluator(parser=parser, text_encoder_checkpoint='all-MiniLM-L6-v2', device=device, lemmatize=True)
 
     random_data_pd = pd.read_csv('data/factual_sg/random/test.csv')
     random_data_captions = random_data_pd['caption'].tolist()
