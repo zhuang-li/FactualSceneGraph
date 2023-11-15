@@ -17,7 +17,8 @@ class SceneGraphParser:
         self.lowercase = lowercase
 
         if lemmatize:
-            self.lemmatizer = WordNetLemmatizer()
+            # Load spacy model for lemmatization
+            self.nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
 
     def _process_text(self, text):
         """
@@ -26,10 +27,12 @@ class SceneGraphParser:
         :param text: A string containing the text to be processed.
         :return: Processed text as a string.
         """
+
         if self.lemmatize:
             # Lemmatize each word in the text
-            tokens = nltk.word_tokenize(text)
-            text = ' '.join([self.lemmatizer.lemmatize(token) for token in tokens])
+            text = ' '.join([token.lemma_ for token in self.nlp(text)])
+
+
 
         if self.lowercase:
             text = text.lower()

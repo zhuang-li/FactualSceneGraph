@@ -1,7 +1,10 @@
+import re
+
 import nltk
 import spacy
 from nltk import WordNetLemmatizer
 from sentence_transformers import SentenceTransformer
+from spacy.tokenizer import Tokenizer
 
 from .set_match_evaluation import eval_set_match
 from .spice_evaluation import eval_spice
@@ -22,7 +25,16 @@ class Evaluator:
         self.lemmatize = lemmatize
 
         if lemmatize:
-            self.lemmatizer = WordNetLemmatizer()
+            # Load spacy model for lemmatization
+            self.nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
+
+            # Define a custom token match function
+            def custom_token_match(text):
+                # Match patterns like 'v:', 'pv:', ':1', ':2', etc.
+                return re.match(r'(v:|pv:|:\d+)', text)
+
+            # Update the tokenizer with the custom token match
+            self.nlp.tokenizer = Tokenizer(self.nlp.vocab, token_match=custom_token_match)
 
     def _process_graphs(self, graph_string):
         """
@@ -31,10 +43,20 @@ class Evaluator:
         :param text: A string containing the text to be processed.
         :return: Processed text as a string.
         """
+
+
+
         if self.lemmatize:
-            # Lemmatize each word in the text
-            tokens = graph_string.split(' ')
-            graph_string = ' '.join([self.lemmatizer.lemmatize(token) for token in tokens])
+            # Tokenize the text using spaCy
+            doc = self.nlp(graph_string)
+
+            # Define a set of words to exclude from lemmatization
+            exclude_words = {'is', ',', '(', ')'}
+            # Lemmatize tokens that are not in exclude_words and are not punctuations
+            lemmatized_tokens = [token.lemma_ if token.text not in exclude_words and not token.is_punct else token.text for token in doc]
+
+            # Join the lemmatized tokens back into a string
+            graph_string = ' '.join(lemmatized_tokens)
 
         return graph_string
 

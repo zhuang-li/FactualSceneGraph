@@ -69,6 +69,10 @@ def clean_graph_string(fact_str):
         if fact:
             unique_facts.add(fact)
 
+    # sort unique_facts
+
+    unique_facts = sorted(unique_facts)
+
     # Reconstruct the string with unique facts
     unique_fact_str = ' , '.join([f'( {fact} )' for fact in unique_facts])
     return unique_fact_str
