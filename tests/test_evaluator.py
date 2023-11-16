@@ -14,7 +14,7 @@ def test_scene_graph_parsing():
 
 def test_scene_graph_parsing_on_random():
     parser = SceneGraphParser('lizhuang144/flan-t5-large-VG-factual-sg-id', device=device,lemmatize=False)
-    evaluator = Evaluator(parser=parser,text_encoder_checkpoint='all-MiniLM-L6-v2',  device='cuda:0',lemmatize=True)
+    evaluator = Evaluator(parser=parser,text_encoder_checkpoint='all-MiniLM-L6-v2',  device=device,lemmatize=True)
 
     random_data_pd = pd.read_csv('data/factual_sg_id/random/test.csv')
     random_data_captions = random_data_pd['caption'].tolist()
