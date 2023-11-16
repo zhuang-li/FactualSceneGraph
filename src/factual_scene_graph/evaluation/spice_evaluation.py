@@ -1,7 +1,9 @@
 from nltk.corpus import wordnet
+
+from .synonym_dictionary import synonym_dictionary
 from ..utils import get_seg_list
 
-def eval_spice(cand, refs):
+def eval_spice(cand, refs, merge_tuples_synonyms=False, synonym_match=True):
     """
     Evaluate the SPICE metric.
 
@@ -9,12 +11,12 @@ def eval_spice(cand, refs):
     :param ref_tuples: Reference tuples for comparison.
     :return: Calculated SPICE score.
     """
-    cand_tuples = get_graph_tuples(cand)
-    ref_tuples = get_graph_tuples(refs)
+    cand_tuples = get_graph_tuples(cand, merge_tuples_synonyms)
+    ref_tuples = get_graph_tuples(refs, merge_tuples_synonyms)
 
-    return calculate_spice_score(cand_tuples, ref_tuples)
+    return calculate_spice_score(cand_tuples, ref_tuples, synonym_match)
 
-def calculate_spice_score(cand_tuples, ref_tuples):
+def calculate_spice_score(cand_tuples, ref_tuples, synonym_match):
     matched_cand_indices = set()
     matched_ref_indices = set()
     total_matches = 0
@@ -28,15 +30,18 @@ def calculate_spice_score(cand_tuples, ref_tuples):
                 total_matches += 1
                 break
 
-    # Second pass: WordNet-based similar matches (for unmatched candidates)
-    for i, cand in enumerate(cand_tuples):
-        if i not in matched_cand_indices:
-            for j, ref in enumerate(ref_tuples):
-                if j not in matched_ref_indices and similar_to_any(cand, [ref]):
-
-                    matched_ref_indices.add(j)
-                    total_matches += 1
-                    break
+    if synonym_match:
+        # Second pass: WordNet-based similar matches (for unmatched candidates)
+        for i, cand in enumerate(cand_tuples):
+            if i not in matched_cand_indices:
+                for j, ref in enumerate(ref_tuples):
+                    if j not in matched_ref_indices and similar_to_any(cand, [ref]):
+                        # print("Synonym match")
+                        # print(cand)
+                        # print(ref)
+                        matched_ref_indices.add(j)
+                        total_matches += 1
+                        break
     # Calculate precision, recall, and F1 score
     precision = calculate_score(total_matches, len(cand_tuples))
     recall = calculate_score(total_matches, len(ref_tuples))
@@ -54,6 +59,7 @@ def similar_to_any(candidate, references):
     :return: True if similar to any reference, False otherwise.
     """
     candidate_synsets = get_synsets(candidate)
+
     return any(are_synsets_similar(candidate_synsets, get_synsets(ref)) for ref in references)
 
 def get_synsets(words):
@@ -81,13 +87,16 @@ def word_to_synset(word):
     if len(word_split) >= 2:
         word = "_".join(word_split)
 
-    # Add the word itself to the synset set
-    lemma_synset.add(word)
+    # # Add the word itself to the synset set
+    # lemma_synset.add(word)
+    #
+    # # Add all synsets of the word to the set
+    # for sys in wordnet.synsets(word):
+    #     for lemma in sys.lemmas():
+    #         lemma_synset.add(lemma.name())
 
-    # Add all synsets of the word to the set
-    for sys in wordnet.synsets(word):
-        for lemma in sys.lemmas():
-            lemma_synset.add(lemma.name())
+    lemma_synset.update(synonym_dictionary.get_synsets(word))
+    lemma_synset.update(synonym_dictionary.get_stem_synsets(word))
 
     return lemma_synset
 
@@ -121,7 +130,10 @@ def calculate_f1(precision, recall):
     """
     return 2 * precision * recall / (precision + recall) if precision + recall > 0 else 0
 
-def get_graph_tuples(graph_str_list):
+def get_graph_tuples(graph_str_list, merge_tuples_synonyms=True):
+    """
+    Get tuples from a scene graph.
+    """
     seg_list = get_seg_list(graph_str_list)
     selected_obj_set = set()
     tuples = []
@@ -136,7 +148,29 @@ def get_graph_tuples(graph_str_list):
         elif seg_len >= 2:
             process_lf_segment(lf_seg, tuples, selected_obj_set, seg_len)
 
-    return tuples
+    if merge_tuples_synonyms:
+        return merge_tuples_based_on_synonyms(sorted(tuples, key=tuple_sort_key))
+    else:
+        return sorted(tuples, key=tuple_sort_key)
+
+def tuple_sort_key(t):
+    # Join the words in the tuple into a single string
+    return ' '.join(t)
+
+def merge_tuples_based_on_synonyms(tuples):
+    """
+    Merge tuples that have synonyms in common.
+
+    :param tuples: A list of tuples.
+    :return: A list of merged tuples.
+    """
+    merged_tuples = []
+
+    for t in tuples:
+        if not similar_to_any(t, merged_tuples):
+            merged_tuples.append(t)
+
+    return merged_tuples
 
 def add_unique_tuple(item, tuples, selected_obj_set):
     """
@@ -150,16 +184,29 @@ def process_lf_segment(lf_seg, tuples, selected_obj_set, seg_len):
     """
     Processes a segment of length 2 or more and adds appropriate tuples.
     """
+    # Construct the tuple string based on segment length
     if seg_len == 2 or (seg_len == 3 and lf_seg[1] == 'is'):
-        tuples.append((lf_seg[0], lf_seg[-1]))
+        tuple_str = lf_seg[0] + ' ' + lf_seg[-1]
+        if tuple_str not in selected_obj_set:
+            tuples.append((lf_seg[0], lf_seg[-1]))
+            selected_obj_set.add(tuple_str)
         add_unique_tuple(lf_seg[0], tuples, selected_obj_set)
+
     elif seg_len == 3:
-        tuples.append((lf_seg[0], lf_seg[1], lf_seg[2]))
+        tuple_str = ' '.join(lf_seg)
+        if tuple_str not in selected_obj_set:
+            tuples.append((lf_seg[0], lf_seg[1], lf_seg[2]))
+            selected_obj_set.add(tuple_str)
         add_unique_tuple(lf_seg[0], tuples, selected_obj_set)
         add_unique_tuple(lf_seg[2], tuples, selected_obj_set)
-    else:  # seg_len > 3
-        tuples.append((lf_seg[0], " ".join(lf_seg[1:-1]), lf_seg[-1]))
+
+    elif seg_len > 3:
+        tuple_str = lf_seg[0] + ' ' + ' '.join(lf_seg[1:-1]) + ' ' + lf_seg[-1]
+        if tuple_str not in selected_obj_set:
+            tuples.append((lf_seg[0], " ".join(lf_seg[1:-1]), lf_seg[-1]))
+            selected_obj_set.add(tuple_str)
         add_unique_tuple(lf_seg[0], tuples, selected_obj_set)
         add_unique_tuple(lf_seg[-1], tuples, selected_obj_set)
+
 
 

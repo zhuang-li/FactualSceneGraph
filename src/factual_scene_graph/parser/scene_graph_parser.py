@@ -1,5 +1,3 @@
-import nltk
-import spacy
 import torch
 from nltk import WordNetLemmatizer
 from tqdm import tqdm
@@ -17,8 +15,7 @@ class SceneGraphParser:
         self.lowercase = lowercase
 
         if lemmatize:
-            # Load spacy model for lemmatization
-            self.nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
+            self.lemmatizer = WordNetLemmatizer()
 
     def _process_text(self, text):
         """
@@ -30,7 +27,8 @@ class SceneGraphParser:
 
         if self.lemmatize:
             # Lemmatize each word in the text
-            text = ' '.join([token.lemma_ for token in self.nlp(text)])
+            tokens = text.split(' ')
+            text = ' '.join([self.lemmatizer.lemmatize(token) for token in tokens])
 
 
 

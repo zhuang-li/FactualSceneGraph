@@ -38,7 +38,7 @@ def compute_correlation(input_json, tauvariant='c'):
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', device=device, lemmatize=False, lowercase=True)
-    evaluator = Evaluator(parser=parser, text_encoder_checkpoint='all-MiniLM-L6-v2', device=device, lemmatize=False)
+    evaluator = Evaluator(parser=parser, text_encoder_checkpoint='all-MiniLM-L6-v2', device=device, lemmatize=True)
 
     # Paths for the pickle files
     cand_graphs_pickle = 'tests/test_data/cand_graphs.pkl'
@@ -87,4 +87,3 @@ def compute_correlation(input_json, tauvariant='c'):
 
 if __name__ == '__main__':
     compute_correlation('tests/test_data/flickr8k.json', tauvariant='c')
-    compute_correlation('tests/test_data/crowdflower_flickr8k.json', tauvariant='c')

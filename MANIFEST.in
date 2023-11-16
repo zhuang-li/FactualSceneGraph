@@ -1,1 +1,2 @@
 include README.md
+include src/factual_scene_graph/evaluation/resources/*

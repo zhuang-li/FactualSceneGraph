@@ -1,15 +1,16 @@
+import random
 import re
 
 import nltk
 import spacy
 from nltk import WordNetLemmatizer
 from sentence_transformers import SentenceTransformer
-from spacy.tokenizer import Tokenizer
+from tqdm import tqdm
 
 from .set_match_evaluation import eval_set_match
 from .spice_evaluation import eval_spice
 from .soft_spice_evaluation import *
-from ..utils import is_graph_format, clean_graph_string, space_out_symbols_in_graph
+from ..utils import is_graph_format, space_out_symbols_in_graph
 import logging
 
 # Set up logging configuration (adjust the level and format as needed)
@@ -25,16 +26,17 @@ class Evaluator:
         self.lemmatize = lemmatize
 
         if lemmatize:
-            # Load spacy model for lemmatization
-            self.nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
-
-            # Define a custom token match function
-            def custom_token_match(text):
-                # Match patterns like 'v:', 'pv:', ':1', ':2', etc.
-                return re.match(r'(v:|pv:|:\d+)', text)
-
-            # Update the tokenizer with the custom token match
-            self.nlp.tokenizer = Tokenizer(self.nlp.vocab, token_match=custom_token_match)
+            # # Load spacy model for lemmatization
+            # self.nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
+            #
+            # # Define a custom token match function
+            # def custom_token_match(text):
+            #     # Match patterns like 'v:', 'pv:', ':1', ':2', etc.
+            #     return re.match(r'(v:|pv:|:\d+)', text)
+            #
+            # # Update the tokenizer with the custom token match
+            # self.nlp.tokenizer = Tokenizer(self.nlp.vocab, token_match=custom_token_match)
+            self.lemmatizer = WordNetLemmatizer()
 
     def _process_graphs(self, graph_string):
         """
@@ -48,15 +50,18 @@ class Evaluator:
 
         if self.lemmatize:
             # Tokenize the text using spaCy
-            doc = self.nlp(graph_string)
-
-            # Define a set of words to exclude from lemmatization
+            # doc = self.nlp(graph_string)
+            #
+            # # Define a set of words to exclude from lemmatization
+            # # Lemmatize tokens that are not in exclude_words and are not punctuations
+            # lemmatized_tokens = [token.lemma_ if token.text not in exclude_words and not token.is_punct else token.text for token in doc]
+            #
+            # # Join the lemmatized tokens back into a string
+            # graph_string = ' '.join(lemmatized_tokens)
+            # Lemmatize each word in the text
             exclude_words = {'is', ',', '(', ')'}
-            # Lemmatize tokens that are not in exclude_words and are not punctuations
-            lemmatized_tokens = [token.lemma_ if token.text not in exclude_words and not token.is_punct else token.text for token in doc]
-
-            # Join the lemmatized tokens back into a string
-            graph_string = ' '.join(lemmatized_tokens)
+            tokens = graph_string.split(' ')
+            graph_string = ' '.join([self.lemmatizer.lemmatize(token) if not token in exclude_words else token for token in tokens])
 
         return graph_string
 
@@ -88,9 +93,14 @@ class Evaluator:
         if method_function is None:
             raise ValueError(f"Unknown evaluation method: {method}")
 
-        # Evaluate using the selected method
-        scores = method_function(candidates, references, batch_size) if method == 'soft_spice' else method_function(
-            candidates, references)
+        # Filter kwargs based on the method
+        if method == 'soft_spice':
+            scores = method_function(candidates, references, batch_size)
+        elif method == 'spice':
+            method_kwargs = {k: kwargs[k] for k in kwargs if k in ['merge_tuples_synonyms', 'synonym_match']}
+            scores = method_function(candidates, references, **method_kwargs)
+        else:
+            scores = method_function(candidates, references)
 
         logging.info("Evaluation completed.")
 
@@ -133,6 +143,27 @@ class Evaluator:
         """
         return all(is_graph_format(item) for item in items)
 
+    def _needs_parsing(self, items, is_nested, sample_size=5):
+        """
+        Determine if parsing is needed based on a random sample from a list of items.
+
+        :param items: List of items or nested list of items.
+        :param is_nested: Boolean indicating if 'items' is a nested list.
+        :param sample_size: The number of items to sample for checking.
+        :return: Boolean indicating if parsing is needed.
+        """
+
+        # Flatten the list if it is nested
+        if is_nested:
+            flattened_items = [item for sublist in items for item in sublist]
+        else:
+            flattened_items = items
+
+        # Sample a few items from the list
+        sampled_items = random.sample(flattened_items, min(sample_size, len(flattened_items)))
+
+        return not all(is_graph_format(item) for item in sampled_items)
+
     def _parse_if_needed(self, items, batch_size, is_nested, **kwargs):
         """
         Parse items if they are not in graph format. Handles both nested and non-nested lists.
@@ -145,9 +176,9 @@ class Evaluator:
         :return: Parsed items, maintaining the original structure.
         """
         # Determine whether parsing is needed
-        needs_parsing = not all(
-            is_graph_format(item) for sublist in (items if is_nested else [items]) for item in sublist)
-
+        logging.info("Determine whether parsing is needed...")
+        needs_parsing = self._needs_parsing(items, is_nested)
+        logging.info(f"Parsing is needed: {needs_parsing}")
         if needs_parsing:
             if is_nested:
                 logging.info("Parsing references...")
@@ -210,7 +241,7 @@ class Evaluator:
             scores.append(score)
         return scores
 
-    def _spice_score(self, candidates, references):
+    def _spice_score(self, candidates, references, merge_tuples_synonyms=False, synonym_match=True):
         """
         Compute SPICE score.
 
@@ -219,8 +250,8 @@ class Evaluator:
         :return: List of SPICE scores.
         """
         scores = []
-        for cand, refs in zip(candidates, references):
-            score = eval_spice(cand, refs)
+        for cand, refs in tqdm(zip(candidates, references), total=len(candidates)):
+            score = eval_spice(cand, refs, merge_tuples_synonyms, synonym_match)
             scores.append(score)
         return scores
 
