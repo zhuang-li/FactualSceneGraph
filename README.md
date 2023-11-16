@@ -293,7 +293,7 @@ Below is a table showing the Tau-c correlation values for different models:
 #### Notes on Implementations
 
 - The default parser checkpoint we use for SPICE and Soft-SPICE is `lizhuang144/flan-t5-base-VG-factual-sg` and the default text encoder is `all-MiniLM-L6-v2` from `SentenceTransformer`.
-- The official SPICE implementation can be found at [Modified SPICE Score](https://github.com/yychai74/modified-SPICE-score). Our implementation of SPICE, while slightly underperforming in comparison due to a less complex synonym-matching mechanism, offers ease of use.
+- The official SPICE implementation can be found at [Modified SPICE Score](https://github.com/yychai74/modified-SPICE-score). While our implementation of SPICE slightly underperforms in comparison, due to a less complex synonym-matching mechanism, it offers significantly better ease of use.
 - In our paper, we employ SPICE(Ours) for measuring parser performance in Table 3, as it does not influence the ranking of models. However, for direct comparison with previous studies in Tables 5 and 6, we use the official implementation of SPICE.
 
 #### Replicating the Results
