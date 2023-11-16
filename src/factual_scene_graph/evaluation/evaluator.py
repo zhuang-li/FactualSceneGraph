@@ -78,6 +78,14 @@ class Evaluator:
         """
         logging.info("Starting evaluation...")
 
+        if not all(isinstance(candidate, str) for candidate in candidates):
+            raise ValueError("All candidates must be strings.")
+
+        # Ensure references is a list of lists of strings
+        if not all(isinstance(ref_list, list) and all(isinstance(ref, str) for ref in ref_list) for ref_list in
+                   references):
+            raise ValueError("References must be a list of lists of strings.")
+
         # Determine input formats and parse if necessary
         candidates, references = self._parse_inputs(candidates, references, batch_size, **kwargs)
 
