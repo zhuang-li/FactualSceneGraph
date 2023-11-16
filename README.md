@@ -71,7 +71,7 @@ The following table shows the performance comparison of various scene graph pars
 | (pre) Flan-T5-base | 80.77 | 92.97 | 98.87| [flan-t5-base-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg) |
 | (pre) Flan-T5-small | 78.18 | 92.26 | 98.67| [flan-t5-small-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg) |
 
-The prefix "(pre)" indicates models that were pre-trained on the VG scene graph dataset before being fine-tuned on the FACTUAL dataset. The outdated SPICE parser, despite its historical significance, shows a Set Match rate of only 13% and a SPICE score of 56.15, which is significantly lower than the more recent Flan-T5 models fine-tuned on FACTUAL data.
+The prefix "(pre)" indicates models that were pre-trained on the VG scene graph dataset before being fine-tuned on the FACTUAL dataset. The outdated SPICE parser, despite its historical significance, shows a Set Match rate of only 59.68% and a SPICE score of 67.35, which is significantly lower than the more recent Flan-T5 models fine-tuned on FACTUAL data.
 
 > **Note**:
 > 1. **Model Training Adjustments**: In training these models, the node index has been removed. This means that different nodes with identical names are not distinguished by their indexes. Additionally, passive identifiers such as 'p:' are excluded, and verbs and prepositions have been merged. While this format loses some information from the FACTUAL-MR dataset, it remains compatible with the Visual Genome scene graphs and is effectively usable for downstream scene graph tasks.
