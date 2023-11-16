@@ -285,8 +285,8 @@ Below is a table showing the Tau-c correlation values for different models:
 | Model            | Tau-c |
 |------------------|-------|
 | SPICE(Official) | 45.02 |
-| SPICE(Ours)        | 42.51 |
-| Soft-SPICE       | 54.00 |
+| SPICE(Ours)        | 44.42 |
+| Soft-SPICE       | 53.90 |
 | RefCLIPScore     | 53.00 |
 | BERTScore        | 36.71 |
 
