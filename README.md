@@ -276,7 +276,7 @@ def test_scene_graph_parsing_on_random():
 
 ### Human Correlation Performance on the Flickr8k Dataset
 
-In our study, we evaluated the correlation of various metrics with human judgment on the Flickr8k dataset. This comparison helps in understanding how well each metric aligns with human perception.
+In our study, we evaluated the correlation of various metrics with human judgment on the Flickr8k dataset using Kendall’s tau. This comparison helps in understanding how well each metric aligns with human perception.
 
 #### Results
 
