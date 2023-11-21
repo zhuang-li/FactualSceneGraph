@@ -185,7 +185,7 @@ Relations:
 +-----------+------------+----------+
 ```
 
-## Factual Scene Graph Evaluation
+## A Comprehensive Toolkit for Scene Graph Parsing Evaluation
 
 This package provides implementations for evaluating scene graphs using SPICE, SoftSPICE, and Set Match metrics. These evaluations can be performed on various inputs, including captions and scene graphs in both list and nested list formats.
 
