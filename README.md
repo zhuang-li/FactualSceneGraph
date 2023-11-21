@@ -293,11 +293,11 @@ Below is a table showing the Tau-c correlation values for different models:
 | RefCLIPScore     | 53.00 |
 | BERTScore        | 36.71 |
 
-#### Notes on Implementations
+> #### Notes on Implementations
 
-- The default parser checkpoint we use for SPICE and Soft-SPICE is `lizhuang144/flan-t5-base-VG-factual-sg` and the default text encoder is `all-MiniLM-L6-v2` from `SentenceTransformer`.
-- We have recently updated our SPICE implementation with a better synonym-matching dictionary to align with the SPICE(Official), as found in a fork of the official repository [Modified SPICE Score](https://github.com/yychai74/modified-SPICE-score). Our revised implementation demonstrates an even stronger correlation with human judgment compared to the SPICE Official version, as evidenced in the table provided. Based on these improvements and the enhanced correlation results, our implementation can be considered a ***more effective alternative*** to the official SPICE score. We encourage users to explore our version for potentially better performance in relevant applications.
-- In our paper, we employ SPICE(Ours) for measuring parser performance in Table 3, as it does not influence the ranking of models. However, for direct comparison with previous studies in Tables 5 and 6, we use the official implementation of SPICE.
+> - The default parser checkpoint we use for SPICE and Soft-SPICE is `lizhuang144/flan-t5-base-VG-factual-sg` and the default text encoder is `all-MiniLM-L6-v2` from `SentenceTransformer`.
+> - We have recently updated our SPICE implementation with a better synonym-matching dictionary to align with the SPICE(Official), as found in a fork of the official repository [Modified SPICE Score](https://github.com/yychai74/modified-SPICE-score). Our revised implementation demonstrates an even stronger correlation with human judgment compared to the SPICE Official version, as evidenced in the table provided. Based on these improvements and the enhanced correlation results, our implementation can be considered a ***more effective alternative*** to the official SPICE score. We encourage users to explore our version for potentially better performance in relevant applications.
+> - In our paper, we employ SPICE(Ours) for measuring parser performance in Table 3, as it does not influence the ranking of models. However, for direct comparison with previous studies in Tables 5 and 6, we use the official implementation of SPICE.
 
 #### Replicating the Results
 
