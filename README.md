@@ -35,7 +35,7 @@ The FACTUAL Scene Graph dataset includes 40,369 instances with lemmatized predic
 - `caption`: The caption of the image region.
 - `scene_graph`: The scene graph of the image region and caption.
 
-**Related Resources**: [Visual Genome](https://huggingface.co/datasets/visual_genome)
+**Related Resources**: Please find the details of images and regions from [Visual Genome](https://huggingface.co/datasets/visual_genome) given their corresponding IDs.
 
 ### FACTUAL-MR dataset:
 
