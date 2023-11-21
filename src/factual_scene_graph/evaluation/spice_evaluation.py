@@ -3,7 +3,7 @@ from nltk.corpus import wordnet
 from .synonym_dictionary import synonym_dictionary
 from ..utils import get_seg_list
 
-def eval_spice(cand, refs, merge_tuples_synonyms=False, synonym_match=True):
+def eval_spice(cand, refs, merge_tuples_synonyms=True, synonym_match=True):
     """
     Evaluate the SPICE metric.
 
@@ -11,8 +11,15 @@ def eval_spice(cand, refs, merge_tuples_synonyms=False, synonym_match=True):
     :param ref_tuples: Reference tuples for comparison.
     :return: Calculated SPICE score.
     """
+
     cand_tuples = get_graph_tuples(cand, merge_tuples_synonyms)
+    # print(refs)
     ref_tuples = get_graph_tuples(refs, merge_tuples_synonyms)
+    # print(ref_tuples)
+    # breakpoint()
+
+    # print(cand_tuples)
+    # print(ref_tuples)
 
     return calculate_spice_score(cand_tuples, ref_tuples, synonym_match)
 
@@ -24,7 +31,7 @@ def calculate_spice_score(cand_tuples, ref_tuples, synonym_match):
     # First pass: Exact matches
     for i, cand in enumerate(cand_tuples):
         for j, ref in enumerate(ref_tuples):
-            if cand == ref and j not in matched_ref_indices:
+            if are_tuples_match(cand, ref) and j not in matched_ref_indices:
                 matched_cand_indices.add(i)
                 matched_ref_indices.add(j)
                 total_matches += 1
@@ -60,7 +67,10 @@ def similar_to_any(candidate, references):
     """
     candidate_synsets = get_synsets(candidate)
 
-    return any(are_synsets_similar(candidate_synsets, get_synsets(ref)) for ref in references)
+    return any(are_tuples_match(candidate_synsets, get_synsets(ref)) for ref in references)
+
+def get_synsets_for_word_set(word_set):
+    return set().union(*[word_to_synset(word) for word in word_set])
 
 def get_synsets(words):
     """
@@ -69,7 +79,7 @@ def get_synsets(words):
     :param words: A list of words.
     :return: A set of synsets for the words.
     """
-    return [word_to_synset(word) for word in words]
+    return [get_synsets_for_word_set(word_set) for word_set in words]
 
 
 def word_to_synset(word):
@@ -100,7 +110,7 @@ def word_to_synset(word):
 
     return lemma_synset
 
-def are_synsets_similar(synsets1, synsets2):
+def are_tuples_match(synsets1, synsets2):
     """
     Determine if two lists of synsets have non-empty intersections for corresponding elements.
 
@@ -108,6 +118,7 @@ def are_synsets_similar(synsets1, synsets2):
     :param synsets2: Second list of synsets.
     :return: True if all corresponding synsets have a non-empty intersection, False otherwise.
     """
+
     return len(synsets1) == len(synsets2) and all(s1.intersection(s2) for s1, s2 in zip(synsets1, synsets2))
 
 def calculate_score(match_count, total_count):
@@ -154,31 +165,102 @@ def get_graph_tuples(graph_str_list, merge_tuples_synonyms=True):
         return sorted(tuples, key=tuple_sort_key)
 
 def tuple_sort_key(t):
-    # Join the words in the tuple into a single string
-    return ' '.join(t)
+    """
+    Generate a sort key for a tuple of sets of strings.
+
+    :param t: A tuple, each element of which is a set of strings.
+    :return: A string that represents the sorted contents of the sets.
+    """
+    sorted_sets = [' '.join(sorted(s)) for s in t]  # Sort each set and join into strings
+    return ' '.join(sorted_sets)  # Join the sorted strings from each set
+
+
+def merge_elements_by_synsets(tuples, position, check_length, unique_sets=None):
+    """
+    Generalized function to merge elements within tuples based on synsets.
+    """
+    is_shared_set = unique_sets is not None
+    unique_sets = unique_sets or []
+
+    for t in tuples:
+        if len(t) == check_length:
+            merge_found = False
+            for i, merged_set in enumerate(unique_sets):
+                if len(get_synsets_for_word_set(t[position]).intersection(get_synsets_for_word_set(merged_set))) > 0:
+                    merge_found = True
+                    unique_sets[i] = merged_set.union(t[position])
+                    break
+            if not merge_found and not is_shared_set:
+                unique_sets.append(t[position])
+
+    for t in tuples:
+        if len(t) == check_length:
+            for merged_set in unique_sets:
+                if len(get_synsets_for_word_set(t[position]).intersection(get_synsets_for_word_set(merged_set))) > 0:
+                    t[position].update(merged_set)
+                    break
+
+    return unique_sets if not is_shared_set else None
+
 
 def merge_tuples_based_on_synonyms(tuples):
     """
-    Merge tuples that have synonyms in common.
+    Merge nodes, attributes, and relations in tuples based on synonyms.
+    """
+    # Create a shared unique set for specific merge operations
+    shared_unique_set = merge_elements_by_synsets(tuples, 0, 1)  # Merging nodes and initializing shared set
 
-    :param tuples: A list of tuples.
-    :return: A list of merged tuples.
+    # Use the shared set for merging nodes in three-element tuples and at the end of three-element tuples
+    merge_elements_by_synsets(tuples, 0, 3, shared_unique_set)
+    merge_elements_by_synsets(tuples, 2, 3, shared_unique_set)
+
+    # Merging attributes in two-element tuples
+    merge_elements_by_synsets(tuples, 1, 2)
+
+    # Merging relations in three-element tuples
+    merge_elements_by_synsets(tuples, 1, 3)
+
+    merged_tuples = merge_tuples(tuples)
+
+    return merged_tuples
+
+def merge_tuples(tuples):
+    """
+    Merge tuples if they have similar elements.
     """
     merged_tuples = []
-
     for t in tuples:
-        if not similar_to_any(t, merged_tuples):
+        merge_found = False
+        for i, mt in enumerate(merged_tuples):
+            if similar_to_any(t, [mt]):
+                merged_tuples[i] = merge_two_tuples(t, mt)
+                merge_found = True
+                break
+        if not merge_found:
             merged_tuples.append(t)
 
     return merged_tuples
 
+def merge_two_tuples(tuple1, tuple2):
+    """
+    Merge two tuples that have synonyms in common.
+
+    :param tuple1: A tuple.
+    :param tuple2: Another tuple.
+    :return: A merged tuple.
+    """
+    # print(tuple1)
+    # print(tuple2)
+    return [t1.union(t2) for t1, t2 in zip(tuple1, tuple2)]
+
 def add_unique_tuple(item, tuples, selected_obj_set):
     """
-    Adds a tuple to the list if the item is not in the selected object set.
+    Adds a unique tuple from an item.
     """
     if item not in selected_obj_set:
-        tuples.append([item])
+        tuples.append([{item}])
         selected_obj_set.add(item)
+
 
 def process_lf_segment(lf_seg, tuples, selected_obj_set, seg_len):
     """
@@ -188,14 +270,14 @@ def process_lf_segment(lf_seg, tuples, selected_obj_set, seg_len):
     if seg_len == 2 or (seg_len == 3 and lf_seg[1] == 'is'):
         tuple_str = lf_seg[0] + ' ' + lf_seg[-1]
         if tuple_str not in selected_obj_set:
-            tuples.append((lf_seg[0], lf_seg[-1]))
+            tuples.append(({lf_seg[0]}, {lf_seg[-1]}))
             selected_obj_set.add(tuple_str)
         add_unique_tuple(lf_seg[0], tuples, selected_obj_set)
 
     elif seg_len == 3:
         tuple_str = ' '.join(lf_seg)
         if tuple_str not in selected_obj_set:
-            tuples.append((lf_seg[0], lf_seg[1], lf_seg[2]))
+            tuples.append(({lf_seg[0]}, {lf_seg[1]}, {lf_seg[2]}))
             selected_obj_set.add(tuple_str)
         add_unique_tuple(lf_seg[0], tuples, selected_obj_set)
         add_unique_tuple(lf_seg[2], tuples, selected_obj_set)
@@ -203,7 +285,7 @@ def process_lf_segment(lf_seg, tuples, selected_obj_set, seg_len):
     elif seg_len > 3:
         tuple_str = lf_seg[0] + ' ' + ' '.join(lf_seg[1:-1]) + ' ' + lf_seg[-1]
         if tuple_str not in selected_obj_set:
-            tuples.append((lf_seg[0], " ".join(lf_seg[1:-1]), lf_seg[-1]))
+            tuples.append(({lf_seg[0]}, {" ".join(lf_seg[1:-1])}, {lf_seg[-1]}))
             selected_obj_set.add(tuple_str)
         add_unique_tuple(lf_seg[0], tuples, selected_obj_set)
         add_unique_tuple(lf_seg[-1], tuples, selected_obj_set)

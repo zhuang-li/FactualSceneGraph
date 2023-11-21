@@ -3,7 +3,7 @@ from nltk import WordNetLemmatizer
 from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
-from ..utils import space_out_symbols_in_graph, clean_graph_string
+from ..utils import space_out_symbols_in_graph, clean_graph_string, remove_factual_chars
 
 
 class SceneGraphParser:
@@ -37,7 +37,9 @@ class SceneGraphParser:
 
         return text
 
-    def parse(self, descriptions, max_input_len=64, max_output_len=128, beam_size=5, return_text=False, batch_size=32):
+
+
+    def parse(self, descriptions, max_input_len=64, max_output_len=128, beam_size=5, return_text=False, filter_factual_chars=False, batch_size=32):
         if isinstance(descriptions, str):
             descriptions = [descriptions]
 
@@ -50,8 +52,7 @@ class SceneGraphParser:
         # Process descriptions in batches
         for i in tqdm(range(0, len(processed_descriptions), batch_size)):
             batch_descriptions = processed_descriptions[i:i + batch_size]
-            prompt_texts = ['Generate Scene Graph: ' + desc for desc in batch_descriptions]
-
+            prompt_texts = ['Generate Scene Graph: ' + desc.strip() for desc in batch_descriptions]
             with torch.no_grad():
                 encoded_inputs = self.tokenizer(
                     prompt_texts,
@@ -79,6 +80,10 @@ class SceneGraphParser:
                 # Decoding the output
                 generated_texts = self.tokenizer.batch_decode(generated_ids, skip_special_tokens=True,
                                                               clean_up_tokenization_spaces=True)
+
+                if filter_factual_chars:
+                    generated_texts = [remove_factual_chars(text) for text in generated_texts]
+
                 formatted_texts = [clean_graph_string(
                     space_out_symbols_in_graph(text.replace('Generate Scene Graph:', '').strip())) for text in
                                    generated_texts]

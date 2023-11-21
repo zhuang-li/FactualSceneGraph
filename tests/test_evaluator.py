@@ -13,10 +13,10 @@ def test_scene_graph_parsing():
     print(scores)
 
 def test_scene_graph_parsing_on_random():
-    parser = SceneGraphParser('lizhuang144/flan-t5-large-VG-factual-sg-id', device=device,lemmatize=False)
+    parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', device=device,lemmatize=False, lowercase=True)
     evaluator = Evaluator(parser=parser,text_encoder_checkpoint='all-MiniLM-L6-v2',  device=device,lemmatize=True)
 
-    random_data_pd = pd.read_csv('data/factual_sg_id/random/test.csv')
+    random_data_pd = pd.read_csv('data/factual_sg/random/test.csv')
     random_data_captions = random_data_pd['caption'].tolist()
     random_data_graphs = [[scene] for scene in random_data_pd['scene_graph'].tolist()]
     spice_scores, cand_graphs, ref_graphs = evaluator.evaluate(random_data_captions, random_data_graphs, method='spice', beam_size=1, batch_size=128, max_input_len=256, max_output_len=256, return_graphs=True)

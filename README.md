@@ -64,12 +64,12 @@ The following table shows the performance comparison of various scene graph pars
 > **Note**: It is important to note that in the original work of Yu et al., 2019, the metric was applied to SQL clauses, whereas in our context, it has been tailored to assess scene graph facts.
 
 
-| Model | Set Match | SPICE | Soft-SPICE| Model Weight |
-|-------|-----------|-------|--------------|--------------|
-| SPICE Parser | 59.68 | 67.35 | 92.63 | [modified-SPICE-score](https://github.com/yychai74/modified-SPICE-score) |
-| (pre) Flan-T5-large | 81.63 | 93.20 | 98.75 | [flan-t5-large-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg) |
-| (pre) Flan-T5-base | 80.77 | 92.97 | 98.87| [flan-t5-base-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg) |
-| (pre) Flan-T5-small | 78.18 | 92.26 | 98.67| [flan-t5-small-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg) |
+| Model | Set Match | SPICE | Soft-SPICE | Model Weight |
+|-------|-----------|-------|------------|--------------|
+| SPICE Parser | 59.68     | 67.35 | 92.63      | [modified-SPICE-score](https://github.com/yychai74/modified-SPICE-score) |
+| (pre) Flan-T5-large | 81.63     | 93.20 | 98.75      | [flan-t5-large-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg) |
+| (pre) Flan-T5-base | 81.37     | 93.27  | 98.83      | [flan-t5-base-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg) |
+| (pre) Flan-T5-small | 78.18     | 92.26 | 98.67      | [flan-t5-small-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg) |
 
 The prefix "(pre)" indicates models that were pre-trained on the VG scene graph dataset before being fine-tuned on the FACTUAL dataset. The outdated SPICE parser, despite its historical significance, shows a Set Match rate of only 59.68% and a SPICE score of 67.35, which is significantly lower than the more recent Flan-T5 models fine-tuned on FACTUAL data.
 
@@ -288,15 +288,15 @@ Below is a table showing the Tau-c correlation values for different models:
 | Model            | Tau-c |
 |------------------|-------|
 | SPICE(Official) | 45.02 |
-| SPICE(Ours)        | 44.42 |
-| Soft-SPICE       | 53.90 |
+| SPICE(Ours)        | 45.25 |
+| Soft-SPICE       | 54.20  |
 | RefCLIPScore     | 53.00 |
 | BERTScore        | 36.71 |
 
 #### Notes on Implementations
 
 - The default parser checkpoint we use for SPICE and Soft-SPICE is `lizhuang144/flan-t5-base-VG-factual-sg` and the default text encoder is `all-MiniLM-L6-v2` from `SentenceTransformer`.
-- The official SPICE implementation can be found at [Modified SPICE Score](https://github.com/yychai74/modified-SPICE-score). While our implementation of SPICE slightly underperforms in comparison, due to a less complex synonym-matching mechanism, it offers significantly better ease of use.
+- We have recently updated our SPICE implementation with a better synonym matching dictionary to align with the SPICE(Official), as found in the official repository [Modified SPICE Score](https://github.com/yychai74/modified-SPICE-score). Our revised implementation demonstrates an even stronger correlation with human judgment compared to the SPICE Official version, as evidenced in the table provided. Based on these improvements and the enhanced correlation results, our implementation can be considered a ***more effective alternative*** to the official SPICE score. We encourage users to explore our version for potentially better performance in relevant applications.
 - In our paper, we employ SPICE(Ours) for measuring parser performance in Table 3, as it does not influence the ranking of models. However, for direct comparison with previous studies in Tables 5 and 6, we use the official implementation of SPICE.
 
 #### Replicating the Results

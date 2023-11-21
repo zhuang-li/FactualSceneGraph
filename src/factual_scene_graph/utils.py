@@ -53,6 +53,22 @@ def is_graph_format(input_string):
 
     return bool(re.search(graph_pattern, input_string))
 
+def remove_factual_chars(text):
+    """
+    Remove specific substrings from the text, including patterns like ':digit'.
+
+    :param text: Input text from which substrings will be removed.
+    :return: Text after removing specific substrings.
+    """
+    # Direct string replacements
+    replacements = ['v:', 'pv:']
+    for replacement in replacements:
+        text = text.replace(replacement, '')
+
+    # Using regular expression to remove patterns like ':digit'
+    text = re.sub(r':\d+', '', text)
+
+    return text
 
 def clean_graph_string(fact_str):
     # Split the string into individual facts

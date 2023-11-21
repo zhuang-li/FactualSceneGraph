@@ -10,6 +10,27 @@ from factual_scene_graph.evaluation.evaluator import Evaluator
 from factual_scene_graph.parser.scene_graph_parser import SceneGraphParser
 
 
+def collect_unique_captions(candidates, refs):
+    """Collect unique captions from candidates and references."""
+    caption_set = set(candidates)  # Add all candidates to the set
+    for ref_list in refs:
+        caption_set.update(ref_list)  # Add all elements from each list in refs
+    return list(caption_set)
+
+def parse_captions(captions, parser):
+    """Parse captions and return a dictionary of results."""
+    parse_results = parser.parse(captions, batch_size=64, max_input_len=256,
+                                 max_output_len=256, beam_size=1, return_text=True)
+    return {caption: result
+            for caption, result in zip(captions, parse_results)}
+
+def evaluate_graphs(candidates, refs, parse_dict, evaluator, return_graphs):
+    """Evaluate the graphs and return the results."""
+    cand_graphs = [parse_dict[cand] for cand in candidates]
+    ref_graphs = [[parse_dict[ref_i] for ref_i in ref] for ref in refs]
+    return evaluator.evaluate(cand_graphs, ref_graphs, method='spice',
+                              beam_size=1, batch_size=64, max_input_len=256,
+                              max_output_len=256, return_graphs=return_graphs)
 
 def compute_correlation(input_json, tauvariant='c'):
     data = {}
@@ -40,37 +61,12 @@ def compute_correlation(input_json, tauvariant='c'):
     parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', device=device, lemmatize=False, lowercase=True)
     evaluator = Evaluator(parser=parser, text_encoder_checkpoint='all-MiniLM-L6-v2', device=device, lemmatize=True)
 
-    # Paths for the pickle files
-    cand_graphs_pickle = 'tests/test_data/cand_graphs.pkl'
-    ref_graphs_pickle = 'tests/test_data/ref_graphs.pkl'
 
-    # Function to save an object to a pickle file
-    def save_to_pickle(obj, filename):
-        with open(filename, 'wb') as file:
-            pickle.dump(obj, file)
+    caption_list = collect_unique_captions(candidates, refs)
+    parse_dict = parse_captions(caption_list, parser)
 
-    # Function to load an object from a pickle file
-    def load_from_pickle(filename):
-        with open(filename, 'rb') as file:
-            return pickle.load(file)
-
-    # Check if the cand_graphs pickle file exists
-    if not os.path.exists(cand_graphs_pickle):
-        spice_scores, cand_graphs, ref_graphs = evaluator.evaluate(candidates, refs, method='spice',
-                                                                   beam_size=1, batch_size=64, max_input_len=256,
-                                                                   max_output_len=256, return_graphs=True)
-        # Dump cand_graphs if the file doesn't exist
-        save_to_pickle(cand_graphs, cand_graphs_pickle)
-        save_to_pickle(ref_graphs, ref_graphs_pickle)
-    else:
-        # Load cand_graphs if the file exists
-        cand_graphs = load_from_pickle(cand_graphs_pickle)
-        ref_graphs = load_from_pickle(ref_graphs_pickle)
-        spice_scores = evaluator.evaluate(cand_graphs, ref_graphs, method='spice',
-                                                                   beam_size=1, batch_size=64, max_input_len=256,
-                                                                   max_output_len=256, return_graphs=False)
-
-
+    # Evaluate with return_graphs=True
+    spice_scores, cand_graphs, ref_graphs = evaluate_graphs(candidates, refs, parse_dict, evaluator, True)
 
 
     assert len(spice_scores) == len(human_scores)

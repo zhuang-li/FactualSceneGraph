@@ -27,7 +27,7 @@ def test_space_out_symbols_in_graph():
 def test_scene_graph_parser():
     # Assuming SceneGraphParser is correctly instantiated as `parser`
     # Test normal input
-    parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', device='cuda:0')
+    parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg-id', device='cuda:0')
     text_graph = parser.parse(["2 beautiful pigs are flying on the sky with 2 bags on their backs"],return_text=True)
 
     print(text_graph[0])
@@ -45,6 +45,10 @@ def test_scene_graph_parser():
     print(graph_obj[0])
 
     tprint(graph_obj[0])
+
+    text_graph = parser.parse(["a logo is written on another logo"],return_text=True,filter_factual_chars=True)
+
+    print(text_graph[0])
 
 
 if __name__ == "__main__":
