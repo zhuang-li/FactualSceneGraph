@@ -66,7 +66,7 @@ The following table shows the performance comparison of various scene graph pars
 
 | Model | Set Match | SPICE | Soft-SPICE | Model Weight |
 |-------|-----------|-------|------------|--------------|
-| SPICE Parser | 19.30 | 64.77 | 92.60     | [modified-SPICE-score](https://github.com/yychai74/modified-SPICE-score) |
+| SPICE/Stanford Parser | 19.30 | 64.77 | 92.60     | [modified-SPICE-score](https://github.com/yychai74/modified-SPICE-score) |
 | (pre) Flan-T5-large | 81.63     | 93.20 | 98.75      | [flan-t5-large-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-large-VG-factual-sg) |
 | (pre) Flan-T5-base | 81.37     | 93.27  | 98.83      | [flan-t5-base-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-base-VG-factual-sg) |
 | (pre) Flan-T5-small | 78.18     | 92.26 | 98.67      | [flan-t5-small-VG-factual-sg](https://huggingface.co/lizhuang144/flan-t5-small-VG-factual-sg) |
