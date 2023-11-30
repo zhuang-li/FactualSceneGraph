@@ -307,7 +307,7 @@ To replicate the human correlation results for Our SPICE and Soft-SPICE, please 
 
 ## Citation
 
-To cite this work, please use the following Bibtex entry:
+If you find the paper or the accompanying code beneficial, please acknowledge our work in your own research. Please use the following BibTeX entry for citation:
 
 ```
 @inproceedings{li-etal-2023-factual,
