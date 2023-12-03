@@ -287,17 +287,28 @@ Below is a table showing the Tau-c correlation values for different models:
 
 | Model            | Tau-c |
 |------------------|-------|
-| SPICE(Official) | 45.13 |
-| SPICE(Ours)        | 45.25 |
+| SPICE(Official-Original) | 44.77 |
+| SPICE(Official-Factual) | 45.13 |
+| SPICE(Ours-Factual)        | 45.25 |
 | Soft-SPICE       | 54.20  |
 | RefCLIPScore     | 53.00 |
 | BERTScore        | 36.71 |
 
-> #### Notes on Implementations
+#### Implementation Notes
 
-> - The default parser checkpoint we use for SPICE and Soft-SPICE is `lizhuang144/flan-t5-base-VG-factual-sg` and the default text encoder is `all-MiniLM-L6-v2` from `SentenceTransformer`.
-> - We have recently updated our SPICE implementation with a better synonym-matching dictionary to align with the SPICE(Official), as found in a fork of the official repository [Modified SPICE Score](https://github.com/yychai74/modified-SPICE-score). Our revised implementation demonstrates an even stronger correlation with human judgment compared to the SPICE Official version, as evidenced in the table provided. Based on these improvements and the enhanced correlation results, our implementation can be considered a ***more effective alternative*** to the official SPICE score. Additionally, our implementation offers greater ease of use. We encourage users to explore our version for potentially better performance in relevant applications.
-> - In our paper, we employ SPICE(Ours) for measuring parser performance in Table 3, as it does not influence the ranking of models. However, for direct comparison with previous studies in Tables 5 and 6, we use the official implementation of SPICE.
+- **Parser Checkpoint Usage**: 
+  - Metrics including SPICE(Official-Factual), SPICE(Ours-Factual), and Soft-SPICE use `lizhuang144/flan-t5-base-VG-factual-sg` as the parser checkpoint.
+  - SPICE(Official-Original) employs the original parser from [Modified SPICE Score](https://github.com/yychai74/modified-SPICE-score).
+  - Our SPICE score (SPICE(Ours-Factual)) utilizes our own SPICE implementation.
+  - SPICE(Official-Original) and SPICE(Official-Factual) follow the official SPICE implementation in [Modified SPICE Score](https://github.com/yychai74/modified-SPICE-score).
+  - The default text encoder for Soft-SPICE is `all-MiniLM-L6-v2` from `SentenceTransformer`.
+
+- **Recent Updates to SPICE**:
+  - Our SPICE implementation, SPICE(Ours-\*), has been updated with a superior synonym-matching dictionary, aligning more closely with SPICE(Official-\*).
+  - The update, now also our default setting in SPICE(Ours-Factual), demonstrates a stronger correlation with human judgment, surpassing the official SPICE version.
+  - Our implementation now stands as a more effective alternative to the official SPICE score, with added user-friendliness.
+  - We recommend our updated version for improved performance in relevant applications.
+
 
 #### Replicating the Results
 
