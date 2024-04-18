@@ -294,20 +294,38 @@ Below is a table showing the Tau-c correlation values for different models:
 | RefCLIPScore     | 53.00 |
 | BERTScore        | 36.71 |
 
-#### Implementation Notes
+#### SPICE Implementations
 
-- **Parser Checkpoint Usage**: 
-  - Metrics including SPICE(Official-Factual), SPICE(Ours-Factual), and Soft-SPICE use `lizhuang144/flan-t5-base-VG-factual-sg` as the parser checkpoint.
-  - SPICE(Official-Original) employs the original parser from [Modified SPICE Score](https://github.com/yychai74/modified-SPICE-score).
-  - Our SPICE score (SPICE(Ours-Factual)) utilizes our own SPICE implementation.
-  - SPICE(Official-Original) and SPICE(Official-Factual) follow the official SPICE implementation in [Modified SPICE Score](https://github.com/yychai74/modified-SPICE-score).
-  - The default text encoder for Soft-SPICE is `all-MiniLM-L6-v2` from `SentenceTransformer`.
+This section provides an overview of the different SPICE implementations used in our project.
 
-- **Recent Updates to SPICE**:
-  - Our SPICE implementation, SPICE(Ours-\*), has been updated with a superior synonym-matching dictionary, aligning more closely with SPICE(Official-\*).
-  - The update, now also our default setting in SPICE(Ours-Factual), demonstrates a stronger correlation with human judgment, surpassing the official SPICE version.
-  - Our implementation now stands as a more effective alternative to the official SPICE score, with added user-friendliness.
-  - We recommend our updated version for improved performance in relevant applications.
+- **1. SPICE(Official-Original)**:
+
+  - Uses the original parser from the [Modified SPICE Score](https://github.com/yychai74/modified-SPICE-score) repository.
+  - Follows the official SPICE implementation as provided in the repository.
+  - Employs the original parser to process the input and generate the SPICE score.
+
+- **2. SPICE(Official-Factual)**:
+
+  - Follows the official SPICE implementation from the [Modified SPICE Score](https://github.com/yychai74/modified-SPICE-score) repository.
+  - Uses the `lizhuang144/flan-t5-base-VG-factual-sg` checkpoint as the parser instead of the original parser.
+  - The "Factual" suffix indicates that this implementation focuses on capturing factual information in the generated SPICE score.
+
+- **3. SPICE(Ours-Factual)**:
+
+  - Our own SPICE implementation, denoted by the "Ours" prefix.
+  - Utilizes the `lizhuang144/flan-t5-base-VG-factual-sg` checkpoint as the parser.
+  - Updated with an improved synonym-matching dictionary, resulting in closer alignment with the official SPICE synonym-matching version.
+  - The update, now the default setting in SPICE(Ours-Factual), shows a stronger correlation with human judgment than the official SPICE version.
+  - Recommended for better performance in relevant applications.
+
+- **4. Soft-SPICE**:
+
+  - A variant of the SPICE score that incorporates a soft matching mechanism.
+  - Uses the `lizhuang144/flan-t5-base-VG-factual-sg` checkpoint as the parser.
+  - The default text encoder is `all-MiniLM-L6-v2` from the `SentenceTransformer` library.
+  - Aims to provide a more flexible and nuanced evaluation of the generated text by considering soft matches between the reference and the generated content.
+
+These SPICE implementations offer various options for evaluating the quality of the generated text, each with its own characteristics and parser choices. The "Official" implementations follow the original SPICE repository, while our implementation (SPICE(Ours-Factual)) introduces improvements and updates for enhanced performance.
 
 
 #### Replicating the Results
@@ -338,7 +356,6 @@ If you find the paper or the accompanying code beneficial, please acknowledge ou
     publisher = "Association for Computational Linguistics",
     url = "https://aclanthology.org/2023.findings-acl.398",
     pages = "6377--6390",
-    abstract = "Textual scene graph parsing has become increasingly important in various vision-language applications, including image caption evaluation and image retrieval. However, existing scene graph parsers that convert image captions into scene graphs often suffer from two types of errors. First, the generated scene graphs fail to capture the true semantics of the captions or the corresponding images, resulting in a lack of faithfulness. Second, the generated scene graphs have high inconsistency, with the same semantics represented by different annotations.To address these challenges, we propose a novel dataset, which involves re-annotating the captions in Visual Genome (VG) using a new intermediate representation called FACTUAL-MR. FACTUAL-MR can be directly converted into faithful and consistent scene graph annotations. Our experimental results clearly demonstrate that the parser trained on our dataset outperforms existing approaches in terms of faithfulness and consistency. This improvement leads to a significant performance boost in both image caption evaluation and zero-shot image retrieval tasks. Furthermore, we introduce a novel metric for measuring scene graph similarity, which, when combined with the improved scene graph parser, achieves state-of-the-art (SOTA) results on multiple benchmark datasets for the aforementioned tasks.",
 }
 ```
 
