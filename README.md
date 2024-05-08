@@ -308,7 +308,6 @@ This section provides an overview of the different SPICE implementations used in
 
   - Follows the official SPICE implementation from the [Modified SPICE Score](https://github.com/yychai74/modified-SPICE-score) repository.
   - Uses the `lizhuang144/flan-t5-base-VG-factual-sg` checkpoint as the parser instead of the original parser.
-  - The "Factual" suffix indicates that this implementation focuses on capturing factual information in the generated SPICE score.
 
 - **3. SPICE(Ours-Factual)**:
 
