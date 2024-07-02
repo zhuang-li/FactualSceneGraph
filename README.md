@@ -46,7 +46,8 @@ The FACTUAL Scene Graph dataset includes 40,369 instances with lemmatized predic
 
 ### FACTUAL-MR dataset:
 
-- TODO: Add cleaned FACTUAL-MR dataset.
+- `data/factual_mr/factual_mr.csv`
+- `data/factual_mr/meta.json`: the metadata for mapping the abbreviations of quantifiers in `factual_mr.csv` to their complete names.
 
 ### VG Scene Graph dataset:
 
