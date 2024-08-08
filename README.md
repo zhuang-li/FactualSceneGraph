@@ -1,4 +1,4 @@
-# FACTUAL: A Benchmark for Faithful and Consistent Textual Scene Graph Parsing
+# [ACL 23] FACTUAL: A Benchmark for Faithful and Consistent Textual Scene Graph Parsing
 
 Welcome to the official repository for the ACL 2023 paper:  
 [**FACTUAL: A Benchmark for Faithful and Consistent Textual Scene Graph Parsing**](https://arxiv.org/pdf/2305.17497.pdf). Here, you'll find both the code and dataset associated with our research.
