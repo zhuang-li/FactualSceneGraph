@@ -12,7 +12,7 @@ Welcome to the official repository for the ACL 2023 paper:
 <p align="center">
     <a href="https://arxiv.org/abs/2305.17497"><img src="https://img.shields.io/badge/arXiv-2305.17497-b31b1b.svg"></a>
     <a href="https://pypi.org/project/FactualSceneGraph/"><img src="https://img.shields.io/pypi/v/FactualSceneGraph?color=g"></a>
-    <a href="https://pepy.tech/project/FactualSceneGraph"><img src="https://static.pepy.tech/badge/FactualSceneGraph"></a>
+    <a href="https://pepy.tech/projects/FactualSceneGraph"><img src="https://static.pepy.tech/badge/FactualSceneGraph"></a>
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green.svg"></a>
 </p>
 
