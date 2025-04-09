@@ -103,7 +103,8 @@ class Evaluator:
 
         # Filter kwargs based on the method
         if method == 'soft_spice':
-            scores = method_function(candidates, references, batch_size)
+            method_kwargs = {k: kwargs[k] for k in kwargs if k in ['bidirectional']}
+            scores = method_function(candidates, references, batch_size, **method_kwargs)
         elif method == 'spice':
             method_kwargs = {k: kwargs[k] for k in kwargs if k in ['merge_tuples_synonyms', 'synonym_match']}
             scores = method_function(candidates, references, **method_kwargs)
@@ -263,18 +264,19 @@ class Evaluator:
             scores.append(score)
         return scores
 
-    def _soft_spice_score(self, candidates, references, batch_size):
+    def _soft_spice_score(self, candidates, references, batch_size, bidirectional=False):
         """
         Compute Soft SPICE scores for a batch of candidates and references.
 
         :param candidates: A list of candidate scene graphs.
         :param references: A list of reference scene graphs corresponding to the candidates.
         :param batch_size: Batch size to be used for encoding.
+        :param bidirectional: Whether to use bidirectional encoding.
         :return: A list of Soft SPICE scores for each candidate.
         """
         all_cand_phrases, all_ref_phrases, cand_lengths, ref_lengths = accumulate_phrases(candidates, references)
         encoded_cands, encoded_refs = encode_phrases(self.text_encoder, all_cand_phrases, all_ref_phrases, batch_size)
-        scores = compute_scores(encoded_cands, encoded_refs, cand_lengths, ref_lengths)
+        scores = compute_scores(encoded_cands, encoded_refs, cand_lengths, ref_lengths, bidirectional)
         return scores
 
 

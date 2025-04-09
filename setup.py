@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='FactualSceneGraph',
-    version='0.5.0',
+    version='0.5.1',
     author='Zhuang Li',
     author_email='lizhuang144@gmail.com',
     description='A package for scene graph parsing and evaluation',

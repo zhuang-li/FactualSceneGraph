@@ -79,7 +79,7 @@ def accumulate_phrases(candidates, references):
     return all_cand_phrases, all_ref_phrases, cand_lengths, ref_lengths
 
 
-def compute_scores(encoded_cands, encoded_refs, cand_lengths, ref_lengths):
+def compute_scores(encoded_cands, encoded_refs, cand_lengths, ref_lengths, bidirectional=False):
     scores = []
     ref_start_idx = 0
 
@@ -92,7 +92,13 @@ def compute_scores(encoded_cands, encoded_refs, cand_lengths, ref_lengths):
 
         all_sims = cand_feats.dot(ref_feats.T)
         score_per_phrase = np.max(all_sims, axis=1)
-        scores.append(np.mean(score_per_phrase))
+
+        if bidirectional:
+            score_per_phrase_ = np.max(all_sims, axis=0)  # recall-like
+            softspice_bi = (np.mean(score_per_phrase) + np.mean(score_per_phrase_)) / 2
+            scores.append(softspice_bi)
+        else:
+            scores.append(np.mean(score_per_phrase))
 
     return scores
 
