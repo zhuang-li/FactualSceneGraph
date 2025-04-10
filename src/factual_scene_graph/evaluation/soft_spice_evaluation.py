@@ -95,7 +95,18 @@ def compute_scores(encoded_cands, encoded_refs, cand_lengths, ref_lengths, bidir
 
         if bidirectional:
             score_per_phrase_ = np.max(all_sims, axis=0)  # recall-like
-            softspice_bi = (np.mean(score_per_phrase) + np.mean(score_per_phrase_)) / 2
+            # Normalize each score from [-1,1] to [0,1] before averaging
+            norm_scores_precision = (score_per_phrase + 1) / 2
+            norm_scores_recall = (score_per_phrase_ + 1) / 2
+            
+            precision = np.mean(norm_scores_precision)
+            recall = np.mean(norm_scores_recall)
+            
+            # Use harmonic mean (F1-like)
+            if precision + recall > 0:
+                softspice_bi = 2 * (precision * recall) / (precision + recall)
+            else:
+                softspice_bi = 0.0
             scores.append(softspice_bi)
         else:
             scores.append(np.mean(score_per_phrase))
