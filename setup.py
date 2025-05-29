@@ -2,10 +2,10 @@ from setuptools import setup, find_packages
 
 setup(
     name='FactualSceneGraph',
-    version='0.5.2',
+    version='0.6.1',
     author='Zhuang Li',
     author_email='lizhuang144@gmail.com',
-    description='A package for scene graph parsing and evaluation',
+    description='A package for scene graph parsing and evaluation with multi-sentence support',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     url='https://github.com/zhuang-li/FACTUAL',
