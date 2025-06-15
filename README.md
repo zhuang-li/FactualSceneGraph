@@ -19,7 +19,7 @@ Welcome to the official repository for the ACL 2023 Findings paper:
 ## 🆕 New Feature: Multi-Sentence Scene Graph Parsing
 
 > **✨ Now supports parsing complex, multi-sentence descriptions with two powerful approaches!**  
-> **Perfect for modern Vision-Language Models (VLMs) that generate rich, detailed descriptions with multiple sentences instead of simple single-sentence captions.**
+> **✨ Perfect for modern Vision-Language Models (VLMs) that generate rich, detailed descriptions with multiple sentences instead of simple single-sentence captions.**
 > 
 > - **`sentence_merge`**: Efficient multi-sentence parsing with automatic merging - ideal for processing detailed image descriptions, stories, and complex scene narratives
 > - **`DiscoSG-Refiner`**: Advanced multi-sentence parsing with iterative refinement - state-of-the-art quality for research and high-precision applications
@@ -64,32 +64,6 @@ result = parser.parse(["""The cat sits on a mat. The mat is red and soft.
 **Quick Example:**
 ```python
 from factual_scene_graph.parser.scene_graph_parser import SceneGraphParser
-
-# DiscoSG-Refiner parser with multi-round refinement for multi-sentence text
-parser = SceneGraphParser(
-    'lizhuang144/flan-t5-base-VG-factual-sg', 
-    parser_type='DiscoSG-Refiner',
-    refiner_checkpoint_path='sqlinn/DiscoSG-Refiner-Large-t5-only',
-    device='mps'  # or 'cuda', 'cpu'
-)
-
-# Single sentence: uses basic parsing (no refinement needed)
-single_result = parser.parse(["One dog is running."])
-
-# Multi-sentence: gets full refinement treatment
-multi_result = parser.parse([
-    "One dog is running. Another dog is flying and blue."
-], 
-max_input_len=1024,  # Important: ensure sufficient length for refinement
-max_output_len=512,
-beam_size=5, 
-refinement_rounds=2,  # Number of refinement iterations
-return_text=True
-)
-```
-
-**Advanced Configuration:**
-```python
 # Custom refinement with different task types
 parser = SceneGraphParser(
     'lizhuang144/flan-t5-base-VG-factual-sg',
@@ -108,6 +82,7 @@ task='delete_before_insert',  # or 'insert_delete', 'insert', 'delete'
 refinement_rounds=2,
 max_input_len=1024,
 max_output_len=512,
+batch_size=2,
 beam_size=5,
 return_text=True
 )
