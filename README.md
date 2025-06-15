@@ -19,8 +19,10 @@ Welcome to the official repository for the ACL 2023 Findings paper:
 ## 🆕 New Feature: Multi-Sentence Scene Graph Parsing
 
 > **✨ Now supports parsing complex, multi-sentence descriptions with two powerful approaches!**  
-> - Use `parser_type='sentence_merge'` for efficient multi-sentence parsing with automatic merging
-> - Use `parser_type='DiscoSG-Refiner'` for advanced multi-sentence parsing with iterative refinement
+> **Perfect for modern Vision-Language Models (VLMs) that generate rich, detailed descriptions with multiple sentences instead of simple single-sentence captions.**
+> 
+> - **`sentence_merge`**: Efficient multi-sentence parsing with automatic merging - ideal for processing detailed image descriptions, stories, and complex scene narratives
+> - **`DiscoSG-Refiner`**: Advanced multi-sentence parsing with iterative refinement - state-of-the-art quality for research and high-precision applications
 
 **Key Benefits:**
 - 🔄 **Automatic sentence segmentation** using NLTK
