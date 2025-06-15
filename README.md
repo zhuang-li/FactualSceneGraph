@@ -49,7 +49,7 @@ result = parser.parse(["""The cat sits on a mat. The mat is red and soft.
 
 [👀 See full documentation below](#multi-sentence-parsing-approaches)
 
-## 🚀 New Feature: Advanced Multi-Round Refinement with DiscoSG-Refiner
+### 🚀 New Feature: Advanced Multi-Sentence Parsing with Multi-Round Refinement with DiscoSG-Refiner
 
 > **✨ Introducing state-of-the-art scene graph refinement for multi-sentence descriptions!**  
 > Use `parser_type='DiscoSG-Refiner'` to leverage the powerful DiscoSG-Refiner model for iterative scene graph improvement through multi-round refinement.

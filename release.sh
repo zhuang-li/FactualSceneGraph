@@ -25,11 +25,11 @@ rm -rf build/ dist/ *.egg-info/
 
 # 4. Build the package
 echo "📦 Building package..."
-python setup.py sdist bdist_wheel
+python3 setup.py sdist bdist_wheel
 
 # 5. Check the build
 echo "🔍 Checking build..."
-python -m twine check dist/*
+python3 -m twine check dist/*
 
 # 6. Commit changes
 echo "💾 Committing changes..."
@@ -48,11 +48,11 @@ echo "⚠️  About to upload to PyPI. Make sure you have your credentials ready
 read -p "Continue? (y/N): " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    python -m twine upload dist/*
+    python3 -m twine upload dist/*
     echo "✅ Successfully uploaded to PyPI!"
 else
     echo "❌ Upload cancelled. You can manually upload later with:"
-    echo "   python -m twine upload dist/*"
+    echo "   python3 -m twine upload dist/*"
 fi
 
 echo "🎉 Release process completed!"
