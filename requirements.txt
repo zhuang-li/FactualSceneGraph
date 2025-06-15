@@ -3,3 +3,4 @@ scipy==1.11.1
 sentence_transformers==2.2.2
 spacy
 nltk
+discosg

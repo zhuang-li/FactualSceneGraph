@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='FactualSceneGraph',
-    version='0.6.1',
+    version='0.7.0',
     author='Zhuang Li',
     author_email='lizhuang144@gmail.com',
     description='A package for scene graph parsing and evaluation with multi-sentence support',
@@ -24,7 +24,8 @@ setup(
         'sentence-transformers',
         'pandas',
         'numpy',
-        'tabulate'
+        'tabulate',
+        'discosg'
         # Add other dependencies needed for your package
     ],
     classifiers=[

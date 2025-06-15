@@ -5,8 +5,8 @@
 
 set -e  # Exit on any error
 
-VERSION=${1:-"0.6.1"}
-MESSAGE=${2:-"Add multi-sentence scene graph parsing with sentence merge functionality"}
+VERSION=${1:-"0.7.0"}
+MESSAGE=${2:-"Add DiscoSG-Refiner support"}
 
 echo "🚀 Starting release process for version $VERSION"
 

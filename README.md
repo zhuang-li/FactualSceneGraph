@@ -18,8 +18,9 @@ Welcome to the official repository for the ACL 2023 Findings paper:
 
 ## 🆕 New Feature: Multi-Sentence Scene Graph Parsing
 
-> **✨ Now supports parsing complex, multi-sentence descriptions!**  
-> Use `parser_type='sentence_merge'` to automatically split text into sentences, parse each individually, and merge the results into a unified scene graph.
+> **✨ Now supports parsing complex, multi-sentence descriptions with two powerful approaches!**  
+> - Use `parser_type='sentence_merge'` for efficient multi-sentence parsing with automatic merging
+> - Use `parser_type='DiscoSG-Refiner'` for advanced multi-sentence parsing with iterative refinement
 
 **Key Benefits:**
 - 🔄 **Automatic sentence segmentation** using NLTK
@@ -27,20 +28,94 @@ Welcome to the official repository for the ACL 2023 Findings paper:
 - 🧹 **Smart deduplication** of entities and relations
 - 🔗 **Maintains relationships** across sentence boundaries
 - 📝 **Perfect for complex descriptions** like image captions, stories, or detailed scene descriptions
+- 🚀 **Advanced refinement** available with DiscoSG-Refiner for state-of-the-art quality
 
 **Quick Example:**
 ```python
 from factual_scene_graph.parser.scene_graph_parser import SceneGraphParser
 
-# Multi-sentence parser
+# Basic multi-sentence parser
 parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', parser_type='sentence_merge')
+
+# Advanced multi-sentence parser with refinement
+parser_advanced = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', 
+                                  parser_type='DiscoSG-Refiner',
+                                  refiner_checkpoint_path='sqlinn/DiscoSG-Refiner-Large-t5-only')
 
 # Parse complex description
 result = parser.parse(["""The cat sits on a mat. The mat is red and soft. 
                          A dog runs nearby."""])
 ```
 
-[👀 See full documentation below](#multi-sentence-parsing-with-sentence-merge)
+[👀 See full documentation below](#multi-sentence-parsing-approaches)
+
+## 🚀 New Feature: Advanced Multi-Round Refinement with DiscoSG-Refiner
+
+> **✨ Introducing state-of-the-art scene graph refinement for multi-sentence descriptions!**  
+> Use `parser_type='DiscoSG-Refiner'` to leverage the powerful DiscoSG-Refiner model for iterative scene graph improvement through multi-round refinement.
+
+**Key Features:**
+- 🎯 **Multi-round iterative refinement** for enhanced accuracy on multi-sentence text
+- 🔍 **Smart processing** - single-sentence descriptions use basic parsing, multi-sentence descriptions get full refinement
+- 🛡️ **Automatic safety checks** - warns and skips refinement when input length exceeds limits
+
+**Quick Example:**
+```python
+from factual_scene_graph.parser.scene_graph_parser import SceneGraphParser
+
+# DiscoSG-Refiner parser with multi-round refinement for multi-sentence text
+parser = SceneGraphParser(
+    'lizhuang144/flan-t5-base-VG-factual-sg', 
+    parser_type='DiscoSG-Refiner',
+    refiner_checkpoint_path='sqlinn/DiscoSG-Refiner-Large-t5-only',
+    device='mps'  # or 'cuda', 'cpu'
+)
+
+# Single sentence: uses basic parsing (no refinement needed)
+single_result = parser.parse(["One dog is running."])
+
+# Multi-sentence: gets full refinement treatment
+multi_result = parser.parse([
+    "One dog is running. Another dog is flying and blue."
+], 
+max_input_len=1024,  # Important: ensure sufficient length for refinement
+max_output_len=512,
+beam_size=5, 
+refinement_rounds=2,  # Number of refinement iterations
+return_text=True
+)
+```
+
+**Advanced Configuration:**
+```python
+# Custom refinement with different task types
+parser = SceneGraphParser(
+    'lizhuang144/flan-t5-base-VG-factual-sg',
+    parser_type='DiscoSG-Refiner',
+    refiner_checkpoint_path='sqlinn/DiscoSG-Refiner-Large-t5-only',
+    device='cuda'
+)
+
+# Parse with specific task and multiple rounds
+result = parser.parse([
+    """The image captures a bustling urban scene, likely in a European city. 
+    The setting appears to be a pedestrian-friendly square or plaza. 
+    There are numerous people of various ages and attire walking around."""
+],
+task='delete_before_insert',  # or 'insert_delete', 'insert', 'delete'
+refinement_rounds=2,
+max_input_len=1024,
+max_output_len=512,
+beam_size=5,
+return_text=True
+)
+```
+
+**Safety Features:**
+- **Automatic Length Checking**: The parser automatically checks if your `max_input_len` is sufficient for the input text. If not, it issues a warning and skips refinement to prevent errors.
+- **Graceful Fallback**: When refinement is skipped, you still get high-quality results from the base sentence-merge parsing.
+
+[👀 See full documentation below](#advanced-multi-round-refinement-with-discosG-refiner)
 
 ---
 
@@ -49,6 +124,27 @@ result = parser.parse(["""The cat sits on a mat. The mat is red and soft.
 ```sh
 pip install FactualSceneGraph
 ```
+
+**For DiscoSG-Refiner functionality:**
+The DiscoSG-Refiner feature requires the `discosg` package, which is automatically installed as a dependency. However, if you encounter installation issues:
+
+```sh
+# If you encounter issues with discosg installation
+pip install --upgrade FactualSceneGraph
+
+# For development/latest features
+pip install git+https://github.com/zhuang-li/FACTUAL.git
+```
+
+**Troubleshooting:**
+- **Apple Silicon (M1/M2) Users**: The package supports MPS acceleration. Use `device='mps'` for optimal performance.
+- **CUDA Users**: Ensure PyTorch with CUDA support is installed before installing FactualSceneGraph.
+- **Python Compatibility**: Requires Python 3.8+ for full functionality.
+
+**Dependencies:**
+- Core: `torch`, `transformers`, `nltk`, `spacy`
+- Refinement: `discosg`, `peft`, `huggingface-hub`
+- Evaluation: `sentence-transformers`, `pandas`, `numpy`
 
 ## Dataset
 
@@ -221,44 +317,186 @@ Relations:
 +-----------+------------+----------+
 ```
 
-### 🌟 Multi-Sentence Parsing with Sentence Merge
+### 🌟 Multi-Sentence Scene Graph Parsing
 
-**NEW:** For parsing multi-sentence descriptions, use the sentence merge functionality:
+**NEW:** Parse complex, multi-sentence descriptions with two powerful approaches designed specifically for multi-sentence text:
+
+#### **Approach 1: Sentence Merge (`sentence_merge`)**
+Efficient and reliable multi-sentence parsing with automatic merging:
 
 ```python
 from factual_scene_graph.parser.scene_graph_parser import SceneGraphParser
 
 # Sentence merge parser for multi-sentence text
-parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', device='cpu', parser_type='sentence_merge')
+parser = SceneGraphParser('lizhuang144/flan-t5-base-VG-factual-sg', 
+                         device='cpu', 
+                         parser_type='sentence_merge')
 
-# Multi-sentence description
-multi_sentence_text = """The image captures a serene scene in a park. A gravel path, dappled with sunlight 
-filtering through the tall trees on either side, winds its way towards a white bridge. The bridge arches 
-over a small body of water, possibly a stream or a pond. The sky above is a clear blue, with a few clouds 
-scattered across it."""
+# Batch processing multiple multi-sentence descriptions
+descriptions = [
+    """The image captures a serene scene in a park. A gravel path, dappled with sunlight 
+    filtering through the tall trees on either side, winds its way towards a white bridge.""",
+    
+    """A bustling urban scene unfolds in the city center. People walk along the sidewalks 
+    carrying shopping bags. Cars and buses navigate through the busy streets.""",
+    
+    """The kitchen scene shows a chef preparing dinner. Fresh vegetables are arranged on 
+    the counter. Steam rises from the cooking pots on the stove."""
+]
 
-text_graph = parser.parse([multi_sentence_text], beam_size=1, return_text=True)
-graph_obj = parser.parse([multi_sentence_text], beam_size=5, return_text=False, max_output_len=128)
+# Batch processing - all descriptions processed efficiently together
+results = parser.parse(descriptions, 
+                      beam_size=5, 
+                      batch_size=8,  # Process multiple descriptions in batches
+                      return_text=True)
 
-print("Parsed scene graph:")
-print(text_graph[0])
-
-print("\nFormatted output:")
-from factual_scene_graph.utils import tprint
-tprint(graph_obj[0])
+for i, result in enumerate(results):
+    print(f"Description {i+1} scene graph:")
+    print(result)
+    print("-" * 50)
 ```
 
-**How Sentence Merge Works:**
-1. **Sentence Tokenization**: Uses NLTK to split the input text into individual sentences
-2. **Individual Parsing**: Each sentence is parsed separately using the base model
-3. **Graph Merging**: The resulting scene graphs are merged and deduplicated
-4. **Efficient Processing**: All sentences are processed in batches for optimal performance
+#### **Approach 2: DiscoSG-Refiner (`DiscoSG-Refiner`)**
+Advanced multi-sentence parsing with state-of-the-art iterative refinement:
+
+```python
+from factual_scene_graph.parser.scene_graph_parser import SceneGraphParser
+
+# DiscoSG-Refiner parser for advanced multi-sentence refinement
+parser = SceneGraphParser(
+    'lizhuang144/flan-t5-base-VG-factual-sg', 
+    parser_type='DiscoSG-Refiner',
+    refiner_checkpoint_path='sqlinn/DiscoSG-Refiner-Large-t5-only',
+    device='mps'  # Supports 'cpu', 'cuda', 'mps'
+)
+
+# Mixed batch: single and multi-sentence descriptions
+mixed_descriptions = [
+    "A red car is parked.",  # Single sentence - basic parsing
+    
+    """The dog runs in the park. The park has green grass and tall trees. 
+    Children are playing on the swings.""",  # Multi-sentence - gets refinement
+    
+    "The cat sleeps on the sofa.",  # Single sentence - basic parsing
+    
+    """The restaurant is busy tonight. Waiters serve food to customers at tables. 
+    The kitchen staff prepares fresh meals. Soft music plays in the background."""  # Multi-sentence - gets refinement
+]
+
+# Batch processing with automatic smart detection
+results = parser.parse(mixed_descriptions,
+                      max_input_len=1024,
+                      max_output_len=512,
+                      beam_size=5,
+                      batch_size=4,  # Process 4 descriptions at once
+                      refinement_rounds=2,  # Only applied to multi-sentence descriptions
+                      task='delete_before_insert',
+                      return_text=True)
+
+for i, (desc, result) in enumerate(zip(mixed_descriptions, results)):
+    sentence_count = len(desc.split('.')) - 1  # Rough sentence count
+    processing_type = "Multi-round refinement" if sentence_count > 1 else "Basic parsing"
+    print(f"Description {i+1} ({processing_type}):")
+    print(f"Input: {desc[:50]}...")
+    print(f"Scene graph: {result}")
+    print("-" * 70)
+```
+
+**How Multi-Sentence Parsing Works:**
+
+**Sentence Merge Process:**
+1. **Sentence Tokenization**: Uses NLTK to split text into individual sentences
+2. **Batch Processing**: All sentences processed efficiently in batches
+3. **Graph Merging**: Results merged and deduplicated automatically
+4. **Fast & Reliable**: Optimized for speed and consistency
+
+**DiscoSG-Refiner Process:**
+1. **Smart Detection**: Automatically detects single vs. multi-sentence descriptions
+2. **Efficient Processing**: Single sentences use basic parsing (no refinement overhead)
+3. **Multi-Round Refinement**: Multi-sentence descriptions get iterative improvement:
+   - Initial parsing via sentence merge
+   - Multiple rounds of delete-before-insert refinement
+   - Each round enhances scene graph quality
+4. **Safety Checks**: Validates input length compatibility
+5. **Graceful Fallback**: Skips refinement with warning if input too long
+
+**When to Use Which Approach:**
+
+| Parser Type | Best For | Advantages | Use Cases |
+|-------------|----------|------------|-----------|
+| `sentence_merge` | Multi-sentence text | Fast, efficient, reliable | Complex descriptions, stories, detailed captions |
+| `DiscoSG-Refiner` | Multi-sentence text requiring highest quality | State-of-the-art accuracy, iterative improvement | Research, high-quality applications, complex scenes |
 
 **Benefits:**
-- Handles complex, multi-sentence descriptions
-- Maintains relationships across sentence boundaries
-- Automatic deduplication of repeated entities and relations
-- Efficient batch processing for better GPU utilization
+- **Handles Complex Text**: Both approaches designed specifically for multi-sentence descriptions
+- **Maintains Relationships**: Preserves connections across sentence boundaries
+- **Automatic Deduplication**: Removes repeated entities and relations
+- **Efficient Batch Processing**: Optimized for GPU utilization
+- **Smart Processing** (DiscoSG-Refiner): Only applies expensive refinement where needed
+
+**Configuration Options:**
+
+```python
+# Available parser types
+parser_types = [
+    'default',           # Single-pass parsing (for single sentences)
+    'sentence_merge',    # Multi-sentence parsing with merging
+    'DiscoSG-Refiner'   # Advanced multi-sentence parsing with refinement
+]
+
+# Available refinement tasks
+tasks = [
+    'delete_before_insert',  # Delete unwanted triples, then insert new ones (default)
+    'insert_delete',         # Insert new triples, then delete unwanted ones
+    'insert',               # Only insert new triples
+    'delete'                # Only delete unwanted triples
+]
+
+# Example with all options
+parser = SceneGraphParser(
+    checkpoint_path='lizhuang144/flan-t5-base-VG-factual-sg',
+    parser_type='DiscoSG-Refiner',
+    refiner_checkpoint_path='sqlinn/DiscoSG-Refiner-Large-t5-only',
+    device='cuda',
+    lemmatize=False,
+    lowercase=False
+)
+
+result = parser.parse(
+    descriptions=["Your multi-sentence text 1 here...", "Your multi-sentence text 2 here..."],
+    max_input_len=1024,      # Token limit for input
+    max_output_len=512,      # Token limit for output
+    beam_size=5,             # Beam search width
+    refinement_rounds=2,     # Number of refinement iterations
+    task='delete_before_insert',  # Refinement strategy
+    batch_size=32,           # Batch size for processing
+    return_text=True         # Return text or parsed objects
+)
+```
+
+**Performance Tips:**
+- **Input Length**: Set `max_input_len` to at least 512-1024 for complex descriptions
+- **Refinement Rounds**: 2-3 rounds typically provide the best quality/speed trade-off
+- **Device Selection**: Use 'mps' for Apple Silicon, 'cuda' for NVIDIA GPUs, 'cpu' for compatibility
+- **Batch Size**: Adjust based on your GPU memory. You cannot set batch size too large as if the token length is too long!!!
+
+**Error Handling:**
+The parser includes automatic safety checks:
+```python
+# This will show a warning and skip refinement if input is too long
+parser.parse(["Very long description..."], beam_size=5, max_input_len=64)  # Too small
+# Warning: Skipping DiscoSG refinement because max_input_len=64 is smaller than 
+# the shortest caption (129) plus buffer (20). Increase max_input_len or use 
+# shorter captions to enable refinement.
+```
+
+**Advanced Features:**
+- **Higher Quality**: Multi-round refinement significantly improves scene graph accuracy
+- **Intelligent Processing**: Only applies expensive refinement where it's needed (multi-sentence text)
+- **Robust**: Built-in safety checks prevent runtime errors
+- **Flexible**: Supports various refinement strategies and configurations
+- **Compatible**: Works with existing FACTUAL models and evaluation metrics
+- **Batch Processing**: Both approaches support efficient batch processing for multiple descriptions
 
 ## A Comprehensive Toolkit for Scene Graph Parsing Evaluation
 
