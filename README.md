@@ -10,11 +10,32 @@ Welcome to the official repository for the ACL 2023 Findings paper:
 </div>
 
 <p align="center">
-    <a href="https://arxiv.org/abs/2305.17497"><img src="https://img.shields.io/badge/arXiv-2305.17497-b31b1b.svg"></a>
-    <a href="https://pypi.org/project/FactualSceneGraph/"><img src="https://img.shields.io/pypi/v/FactualSceneGraph?color=g"></a>
-    <a href="https://pepy.tech/projects/FactualSceneGraph"><img src="https://static.pepy.tech/badge/FactualSceneGraph"></a>
-    <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green.svg"></a>
+  <!-- FACTUAL paper -->
+  <a href="https://arxiv.org/abs/2305.17497">
+    <img src="https://img.shields.io/badge/Paper-FACTUAL-blue.svg" alt="arXiv 2305.17497">
+  </a>
+
+  <!-- DiscoSG paper -->
+  <a href="https://arxiv.org/abs/2506.15583">
+    <img src="https://img.shields.io/badge/Paper-DiscoSG-purple.svg" alt="arXiv 2506.15583">
+  </a>
+
+  <!-- PyPI version -->
+  <a href="https://pypi.org/project/FactualSceneGraph/">
+    <img src="https://img.shields.io/pypi/v/FactualSceneGraph?color=green" alt="PyPI version">
+  </a>
+
+  <!-- pepy downloads -->
+  <a href="https://pepy.tech/projects/FactualSceneGraph">
+    <img src="https://static.pepy.tech/badge/FactualSceneGraph" alt="pepy downloads">
+  </a>
+
+  <!-- MIT license -->
+  <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT License">
+  </a>
 </p>
+
 
 ## 🆕 New Feature: Multi-Sentence Scene Graph Parsing
 
@@ -31,6 +52,11 @@ Welcome to the official repository for the ACL 2023 Findings paper:
 - 🔗 **Maintains relationships** across sentence boundaries
 - 📝 **Perfect for complex descriptions** like image captions, stories, or detailed scene descriptions
 - 🚀 **Advanced refinement** available with DiscoSG-Refiner for state-of-the-art quality
+
+📖 **Learn more in our latest paper:**  
+[**DiscoSG-Refiner: Discourse-Level Scene Graph Parsing**](https://arxiv.org/abs/2506.15583)
+
+> Upgrade your scene graph pipeline today — from captions to complex stories.
 
 **Quick Example:**
 ```python
