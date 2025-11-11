@@ -663,11 +663,27 @@ If you find the paper or the accompanying code beneficial, please acknowledge ou
     url = "https://aclanthology.org/2023.findings-acl.398",
     pages = "6377--6390",
 }
-@article{lin2025discosg,
-  title={DiscoSG: Towards Discourse-Level Text Scene Graph Parsing through Iterative Graph Refinement},
-  author={Lin, Shaoqing and Teng, Chong and Li, Fei and Ji, Donghong and Qu, Lizhen and Li, Zhuang},
-  journal={arXiv preprint arXiv:2506.15583},
-  year={2025}
+@inproceedings{lin-etal-2025-discosg,
+    title = "{D}isco{SG}: Towards Discourse-Level Text Scene Graph Parsing through Iterative Graph Refinement",
+    author = "Lin, Shaoqing  and
+      Teng, Chong  and
+      Li, Fei  and
+      Ji, Donghong  and
+      Qu, Lizhen  and
+      Li, Zhuang",
+    editor = "Christodoulopoulos, Christos  and
+      Chakraborty, Tanmoy  and
+      Rose, Carolyn  and
+      Peng, Violet",
+    booktitle = "Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing",
+    month = nov,
+    year = "2025",
+    address = "Suzhou, China",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2025.emnlp-main.398/",
+    doi = "10.18653/v1/2025.emnlp-main.398",
+    pages = "7848--7873",
+    ISBN = "979-8-89176-332-6",
 }
 ```
 
