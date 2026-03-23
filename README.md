@@ -353,7 +353,7 @@ These models are the most directly compatible with common Visual Genome style sc
 **Notes**
 
 1. `(pre)` means the model was pretrained on Visual Genome scene graphs and then fine-tuned on FACTUAL.
-2. These models remove node indexes and passive markers such as `p:`.
+2. These models remove node indexes and passive markers such as `pv:`.
 3. Verbs and prepositions are merged for compatibility with downstream scene graph tasks.
 4. The SPICE baseline shown here is re-evaluated against FACTUAL ground truth, which differs from the comparison protocol used in the original paper. See `tests/test_spice_parser.py` for replication.
 
