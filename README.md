@@ -10,7 +10,7 @@
     <img src="https://img.shields.io/badge/Paper-FACTUAL-blue.svg" alt="FACTUAL">
   </a>
   <a href="https://aclanthology.org/2025.emnlp-main.398">
-    <img src="https://img.shields.io/badge/Paper-DiscoSG--Refiner-purple.svg" alt="DiscoSG-Refiner">
+    <img src="https://img.shields.io/badge/Paper-DiscoSG-purple.svg" alt="DiscoSG-Refiner">
   </a>
   <a href="https://pypi.org/project/FactualSceneGraph/">
     <img src="https://img.shields.io/pypi/v/FactualSceneGraph?color=green" alt="PyPI version">
