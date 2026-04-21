@@ -9,10 +9,7 @@
   <a href="https://aclanthology.org/2023.findings-acl.398">
     <img src="https://img.shields.io/badge/Paper-FACTUAL-blue.svg" alt="FACTUAL">
   </a>
-  <a href="https://arxiv.org/abs/2305.17497">
-    <img src="https://img.shields.io/badge/arXiv-2305.17497-b31b1b.svg" alt="arXiv 2305.17497">
-  </a>
-  <a href="https://arxiv.org/abs/2506.15583">
+  <a href="https://aclanthology.org/2025.emnlp-main.398">
     <img src="https://img.shields.io/badge/Paper-DiscoSG--Refiner-purple.svg" alt="DiscoSG-Refiner">
   </a>
   <a href="https://pypi.org/project/FactualSceneGraph/">
